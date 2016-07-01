@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('gameCtrl', function($scope, $interval) {
+.controller('gameCtrl', function($scope, $timeout) {
   console.log('gameCtrl started.')
   
   $scope.game = new Game(1,2,3);
@@ -24,7 +24,7 @@ angular.module('starter.controllers', [])
 
 			
 			$scope.makeAMove = function(whatMove, noAiMove) {
-
+        $scope.clearHighlights($scope.game.table)
 				var moveStr = whatMove
 
 				dbTable = $scope.game
@@ -58,7 +58,11 @@ angular.module('starter.controllers', [])
 
 			//	})
       
-      if(!noAiMove)$scope.makeAiMove()
+      if(!noAiMove){
+        $scope.makeAiMove();
+        $scope.showTable()
+        //$scope.$apply()
+      }
       
       
 			}
@@ -66,8 +70,8 @@ angular.module('starter.controllers', [])
 $scope.makeAiMove = function () {
   
   var whatMove=singleThreadAi($scope.game,2,function(){})
-  $scope.makeAMove(whatMove.moveStr,true)
-  
+  //$scope.makeAMove(whatMove.moveStr,true)
+  $scope.game = moveInTable(whatMove.moveStr, $scope.game, false)
   
 }
 	

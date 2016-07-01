@@ -1,3 +1,26 @@
+appModule.directive('ngTap', function() {
+    return function(scope, element, attrs) {
+      var tapping;
+      tapping = false;
+      element.bind('touchstart', function(e) {
+        element.addClass('active');
+        tapping = true;
+      });
+      element.bind('touchmove', function(e) {
+        element.removeClass('active');
+        tapping = false;
+      });
+      element.bind('touchend', function(e) {
+        element.removeClass('active');
+        if (tapping) {
+          scope.$apply(attrs['ngTap'], element);
+        }
+      });
+    };
+  });
+
+
+
 appModule.directive('wtable', function() {
 			return {
 				restrict: 'E',
@@ -112,7 +135,7 @@ appModule.directive('wtable', function() {
 							</tr>\
 							<tr ng-repeat="(xIndex, x) in outTable track by $index">\
 								<td class="left-column {{headingclass}}">{{8-$index}}</td>\
-								<td ng-repeat="(yIndex, y) in x track by $index" ng-click="clickfunc(xIndex+1,yIndex)" ng-class="{ darker: y[7], square: !y[7]}">\
+								<td ng-repeat="(yIndex, y) in x track by $index" ng-tap="clickfunc(xIndex+1,yIndex)" ng-class="{ darker: y[7], square: !y[7]}">\
 									<div ng-class="divAroundIt">\
 										<img ng-src="{{\'cPiecesPng/\'+y[0]+y[1]+\'.png\'}}" height="{{imgh || scrw*0.11945}}" width="{{imgw || scrw*0.11945}}" ng-class="{ selected: y[8]||y[9], selected2: y[15]}">\
 									</div>\
