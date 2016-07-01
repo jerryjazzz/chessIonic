@@ -8,11 +8,11 @@ appModule.directive('wtable', function() {
           'headingclass': '=',
 					'imgh': '=',
 					'imgv': '=',
-                    
+          'scrw': '='          
 					
 				},
                 link: function(scope, element, attrs) {
-                    
+                  
                     var origtable=undefined	
                   
                     scope.$watch('input',function(oldValue,newValue){
@@ -98,8 +98,8 @@ appModule.directive('wtable', function() {
                    
                    
                 },
-				template: '<table class="{{myclass}}" onload="updateSizes()" style="width:{{sizempl}}%">\
-							<tr class="heading row0 {{headingclass}}">\
+				template: '<table class="{{myclass}}" onload="updateSizes()">\
+							<tr class="heading row0 {{headingclass}}" style="width:{{scrw}}px">\
 								<td class="left-column {{headingclass}}"></td>\
 								<td>A</td>\
 								<td>B</td>\
@@ -114,11 +114,31 @@ appModule.directive('wtable', function() {
 								<td class="left-column {{headingclass}}">{{8-$index}}</td>\
 								<td ng-repeat="(yIndex, y) in x track by $index" ng-click="clickfunc(xIndex+1,yIndex)" ng-class="{ darker: y[7], square: !y[7]}">\
 									<div ng-class="divAroundIt">\
-										<img ng-src="{{\'cPiecesPng/\'+y[0]+y[1]+\'.png\'}}" height="{{imgh}}" width="{{imgw}}" ng-class="{ selected: y[8]||y[9], selected2: y[15]}">\
+										<img ng-src="{{\'cPiecesPng/\'+y[0]+y[1]+\'.png\'}}" height="{{imgh || scrw*0.11945}}" width="{{imgw || scrw*0.11945}}" ng-class="{ selected: y[8]||y[9], selected2: y[15]}">\
 									</div>\
 								</td>\
 							</tr>\
 						</table>'
+        
+        // template: '<div class="row heading row0">\
+				// 				<div class="col-10 left-column {{headingclass}}"></div>\
+				// 				<div class="col-10">A</div>\
+				// 				<div class="col-10">B</div>\
+				// 				<div class="col-10">C</div>\
+				// 				<div class="col-10">D</div>\
+				// 				<div class="col-10">E</div>\
+				// 				<div class="col-10">F</div>\
+				// 				<div class="col-10">G</div>\
+				// 				<div class="col-10">H</div>\
+				// 			</div>\
+				// 			<div class="row" ng-repeat="(xIndex, x) in outTable track by $index">\
+				// 				<div class="col-10 left-column {{headingclass}}">{{8-$index}}</div>\
+				// 				<div  class="col-10" ng-repeat="(yIndex, y) in x track by $index" ng-click="clickfunc(xIndex+1,yIndex)" ng-class="{ darker: y[7], square: !y[7]}">\
+				// 					<div ng-class="divAroundIt">\
+				// 						<img ng-src="{{\'cPiecesPng/\'+y[0]+y[1]+\'.png\'}}" height="{{imgh}}" width="{{imgw}}" ng-class="{ selected: y[8]||y[9], selected2: y[15]}">\
+				// 					</div>\
+				// 				</div>\
+				// 			</div>'
 	
 			}
 		}
