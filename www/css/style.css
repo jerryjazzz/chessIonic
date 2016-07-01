@@ -84,6 +84,11 @@
   /*padding: 2% 1%;*/
 }
 
+.outer-cell {
+  text-align: center;
+  text-align: -webkit-center;
+}
+
 .darker {
   /*width: auto;*/
   height: 0;
@@ -105,6 +110,7 @@
 .left-column {
   width: 24px;
   background-color: grey;
+  vertical-align: middle;
 }
 
 .main-table {
