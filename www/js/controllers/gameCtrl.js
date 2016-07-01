@@ -23,11 +23,11 @@ angular.module('starter.controllers', [])
 
 
 			
-			$scope.makeAMove = function(whatMove) {
+			$scope.makeAMove = function(whatMove, noAiMove) {
 
 				var moveStr = whatMove
 
-				var dbTable = $scope.game
+				dbTable = $scope.game
 
 				dbTable.command = ''
 
@@ -37,18 +37,18 @@ angular.module('starter.controllers', [])
 
 				console.log('before adding pastState:', dbTable.allPastTables.length)
 				dbTable = moveInTable(moveStr, dbTable, false)
-
+        
 				console.log('after adding pastState:', dbTable.allPastTables.length)
 
 				dbTable._id = $scope.game._id
 				dbTable.desiredDepth = 3//$rootScope.depth
 
-				if (dbTable.wName == 'Computer' || dbTable.bName == 'Computer') {
+				// if (dbTable.wName == 'Computer' || dbTable.bName == 'Computer') {
 
-					dbTable.command = 'makeAiMove'
-					dbTable.moveTask = new MoveTaskN(dbTable)
+				// 	dbTable.command = 'makeAiMove'
+				// 	dbTable.moveTask = new MoveTaskN(dbTable)
 
-				}
+				// }
 
 			//	socketSend('moved', dbTable, 'moved', function() {
 
@@ -57,9 +57,19 @@ angular.module('starter.controllers', [])
 					$scope.game.moves = dbTable.moves
 
 			//	})
-
+      
+      if(!noAiMove)$scope.makeAiMove()
+      
+      
 			}
 
+$scope.makeAiMove = function () {
+  
+  var whatMove=singleThreadAi($scope.game,2,function(){})
+  $scope.makeAMove(whatMove.moveStr,true)
+  
+  
+}
 	
 
 
@@ -138,7 +148,7 @@ console.log($scope.game.displayedTable)
 							if ($scope.game.table[x][y][9] == true) {
 
 								$scope.makeAMove(tempMoveStr)
-								$scope.game.wNext = !$scope.game.wNext
+								
 
 								tempMoveStr = ""
 
