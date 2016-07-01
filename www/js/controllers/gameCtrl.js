@@ -1,6 +1,4 @@
-angular.module('starter.controllers', [])
-
-.controller('gameCtrl', function($scope, $timeout) {
+controllers.controller('gameCtrl', function($scope, $timeout) {
   console.log('gameCtrl started.')
   
   $scope.game = new Game(1,2,3);
