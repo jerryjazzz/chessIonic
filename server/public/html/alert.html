@@ -1,0 +1,20 @@
+<h4 style="	text-align: center;">{{alertData.h}}</h4>
+<p style="	text-align: center;">{{alertData.p}}</p>
+
+<li ng-repeat="x in alertData.li">{{x}}</li>
+<div style="
+	position: absolute;
+    bottom: 20;
+	
+	 width: 100%;
+  text-align: center;
+	
+	">
+	
+	<div style="width:100%">
+		<div style="display:inline-block" ng-repeat="x in alertData.buttons track by $index">
+			<button ng-if="x==alertData.defaultButton" id="autoFoc" style="margin:5px;" ng-click="alertButton(alertData.h+'+'+x,alertData.passData)"> {{x}} ({{alertCountDown}})</button>
+			<button ng-if="x!=alertData.defaultButton" style="margin:5px;" ng-click="alertButton(alertData.h+'+'+x,alertData.passData)"> {{x}} </button>
+		
+		</div>
+</div></div>

@@ -1,0 +1,31 @@
+ohup: ignoring input and appending output to ‘nohup.out’
+miki@ubuntu:~/chessMongo$ node server.js 
+connectind to DB...
+app listening at http://:::3000
+connected.
+processing db call from db Q: { started: 2016-06-28T22:06:44.609Z,
+  funcToCall: 'findOne',
+  arguments: [ 'tables', { _id: 'xData' }, [Function] ] }
+/home/miki/chessMongo/node_modules/bson/lib/bson/objectid.js:39
+    throw new Error("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
+    ^
+
+Error: Argument passed in must be a single String of 12 bytes or a string of 24 hex characters
+    at new ObjectID (/home/miki/chessMongo/node_modules/bson/lib/bson/objectid.js:39:11)
+    at Object.exportThis.knownClientReturned (/home/miki/chessMongo/public/js/server/dbFuncs.js:297:14)
+    at Object.onMessageFuncs.Hello (eval at <anonymous> (/home/miki/chessMongo/server.js:84:60), <anonymous>:559:12)
+    at WebSocketConnection.<anonymous> (/home/miki/chessMongo/server.js:104:36)
+    at emitOne (events.js:96:13)
+    at WebSocketConnection.emit (events.js:188:7)
+    at WebSocketConnection.processFrame (/home/miki/chessMongo/node_modules/websocket/lib/WebSocketConnection.js:547:26)
+    at /home/miki/chessMongo/node_modules/websocket/lib/WebSocketConnection.js:321:40
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)
+miki@ubuntu:~/chessMongo$ node server.js 
+connectind to DB...
+app listening at http://:::3000
+connected.
+processing db call from db Q: { started: 2016-06-28T22:06:55.709Z,
+  funcToCall: 'findOne',
+  arguments: [ 'tables', { _id: 'xData' }, [Function] ] }
+
