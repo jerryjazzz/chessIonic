@@ -35,8 +35,12 @@ var messageTheServer = function(command, data, message, cb) {
 		'thinker': sendID
 	}
 
-	toServer('thinkerMessage', postThis, 'thinkerMessage', function() {})
-
+	if(!progress.offline) {
+    toServer('thinkerMessage', postThis, 'thinkerMessage', function() {})
+  } else {
+    postThis.data.callbackId = progress.callbackId;
+    toThinker(postThis);
+  }
 	if (cb) cb()
 
 }
@@ -71,7 +75,6 @@ var progress = {}
 function workerMove(smallMoveTask, thinker) { // smallmovetask has one of my possible 1st moves
 
 	var deepeningTask = new DeepeningTask(smallMoveTask)
-
 	oneDeeper(deepeningTask) //this will make about 30 smalldeepeningtasks from the initial 1 and create deepeningtask.resolverarray
 		//first item in deepeningtask.smalldeepeningtasks is trigger
 
@@ -219,29 +222,36 @@ var taskReceived = function(task) {
         
 		case "splitMove":
         
-            sendSpeedStats=true
+    //  if(task.offline) console.log('OFFLINE MOVE')
+        
+      sendSpeedStats=true
 
 			splitMoveStarted = new Date() // remove this!!!!!!!!!!!!!!!!!!!!
-            progress = {
+      progress = {
+
+        offline: task.offline,
+        callbackId: task.callbackId,
 
 				started: new Date(),
+        
+        
 
 				splitMoves: 0, //totalcount
 				oneDeeperMoves: 0,
 				doneSM: 0, //donecount
 				doneDM: 0,
-                doneDmtotal: 0,
+        doneDmtotal: 0,
 
 				moves: task.data,
 
 				tempDTasks: [],
                 
-                queuedMoves: [],
-                
-                shouldIDraw:task.data[0].sharedData.shouldIDraw,
-                
-                origAllPastTables:task.data[0].sharedData.origAllPastTables,
-                origTable:task.data[0].sharedData.origTable
+        queuedMoves: [],
+        
+        shouldIDraw:task.data[0].sharedData.shouldIDraw,
+        
+        origAllPastTables:task.data[0].sharedData.origAllPastTables,
+        origTable:task.data[0].sharedData.origTable
 
 				//updatedMoves:[]
 
@@ -357,6 +367,38 @@ onmessage = function(event) {
 			})
       
       break;
+      
+    case 'multiThreadAi':
+    
+      var game = reqData.game; 
+      var callbackId = reqData.callbackId
+
+      game.moveTask = new MoveTaskN(game);
+      game.moveTask.sharedData.desiredDepth=reqData.desiredDepth
+      game.moveTask.sharedData.origAllPastTables = game.allPastTables
+
+      game.movesToSend = new SplitMove(game).movesToSend
+      
+      taskReceived({
+        command: 'splitMove',
+        data: game.movesToSend,
+        offline: true,
+        callbackId: callbackId
+      })
+    
+      //var move = singleThreadAi(reqData.game, reqData.desiredDepth, function(){})
+   
+      // postMessage({
+			// 	'resCommand': 'singleThreadAiSolved',
+			// 	'resMessage': 'singleThreadAiSolved',
+			// 	'resData': {
+      //     move: 'a',
+      //     callbackId: reqData.callbackId
+      //   }
+
+			// })
+      
+      break;
 
 
 		case 'echo':
@@ -455,7 +497,7 @@ onmessage = function(event) {
                     var movedTable=moveIt(moveStr,progress.origTable)
                     //console.log(movedTable)
                     var wouldLoop=evalFuncs.checkIfLooped(movedTable,progress.origAllPastTables)
-                    console.log(wouldLoop)
+                   //\ console.log(wouldLoop)
                     
                     
                 }
@@ -785,6 +827,18 @@ function toServer(command, data, message, cb) {
 
 	if (cb) cb()
 
-}
+};
+
+function toThinker(data, cb) {
+	postMessage({
+		'resCommand': 'toThinker',
+		'resMessage': 'toThinker',
+		'resData': data
+
+	})
+  
+	if (cb) cb()
+
+};
 
 ////////////////////worker func end

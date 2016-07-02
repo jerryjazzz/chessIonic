@@ -3,10 +3,13 @@
 			var thinker = this;
 			var callbacks = []
 			
-			var addCallback = function (callback) {
+			var addCallback = function (callback, xData) {
 				
 				var callbackId = Math.random() * Math.random();	//TODO: replace this
-				callbacks[callbackId] = callback;
+				callbacks[callbackId] = {
+					callback: callback,
+					xData: xData	
+				};
 				
 				return callbackId;
 				
@@ -14,7 +17,13 @@
 			
 			var getCallback = function (callbackId) {
 				
-				return callbacks[callbackId];
+				return callbacks[callbackId].callback;
+				
+			};
+			
+			var getXdata = function (callbackId) {
+				
+				return callbacks[callbackId].xData;
 				
 			};
 			
@@ -137,7 +146,8 @@
 					
 					case 'toServer':
 					
-						socketSend(event.data.resData.command,event.data.resData.data,event.data.resData.message,function(){})
+						// socketSend(event.data.resData.command,event.data.resData.data,event.data.resData.message,function(){})
+					console.log('@@@@@@@@@ socketsend',event.data.resData.command,event.data.resData.data,event.data.resData.message,function(){})
 					
 					
 					break;
@@ -158,8 +168,63 @@
 					
 						console.log(event.data)
 					
+					break;
+					
+					case 'toThinker':
+					
+						var task = event.data.resData;
+						switch(task.command){
+							
+							case 'progress':
+							
+								var xData = getXdata(task.data.callbackId)
+								
+								if (task.data.results) xData.results = xData.results.concat(task.data.results);
+								
+								if (task.data.final) {
+										
+									var result = xData.results;
+									
+									result.sort(function(a, b) {
+
+										if (a.score < b.score) {
+											return 1
+										} else {
+											if (a.score === b.score) {
+												return 0
+											} else {
+												return -1
+											}
+										}
+
+									})
+
+									var finalResult = {
+										result: result,
+										winningMove: result[0],
+										moveStr: result[0].moveTree.slice(0, 4)
+									}
+									
+									var callback = getCallback(task.data.callbackId)
+									
+									callback(finalResult);
+							
+						
+								}
+								
+								
+								break;
+							
+							
+							default:
+						}
+						
+					break;
+					
 					
 					default:
+					
+						console.log('@@@unhandled', event.data)
 					
 				}
 			}
@@ -268,6 +333,24 @@
 				 
 				 mainWorker.postMessage({
 					reqCommand: 'singleThreadAi',
+					reqData:{
+						game: game,
+						desiredDepth: desiredDepth,
+						callbackId: callbackId
+					}
+				})
+			}
+
+
+			thinker.multiThreadAi = function (game, desiredDepth, callback) {
+				var callbackId  = addCallback(callback,{
+					results: []
+				});
+				
+				
+					 
+				 mainWorker.postMessage({
+					reqCommand: 'multiThreadAi',
 					reqData:{
 						game: game,
 						desiredDepth: desiredDepth,

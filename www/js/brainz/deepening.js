@@ -466,10 +466,6 @@ function mtProcessDeepSplitMoves(data, thinker, mt, modConst, looped) {
 
 function oneDeeper(deepeningTask) { //only takes original first level deepeningtasks??
 
-
-    
-   
-
 	var resolverArray = [] 
 	var smallDeepeningTask = deepeningTask.smallDeepeningTasks.pop()
  

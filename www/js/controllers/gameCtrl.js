@@ -74,17 +74,22 @@ controllers.controller('gameCtrl', function($scope, $timeout, $interval) {
 			}
 
 $scope.makeAiMove = function () {
-  
 	
-  thinker.singleThreadAi($scope.game, $scope.desiredDepth, function(move){
+  // thinker.singleThreadAi($scope.game, $scope.desiredDepth, function(move){
+		
+	// 	$scope.game = moveInTable(move.moveStr, $scope.game, false)
+  // 	$scope.showTable()
+	// 	$scope.$apply();
+			
+	// });
+	
+	thinker.multiThreadAi($scope.game, $scope.desiredDepth, function(move){
 		
 		$scope.game = moveInTable(move.moveStr, $scope.game, false)
   	$scope.showTable()
 		$scope.$apply();
 			
 	});
-
-  
   
 }
 	
