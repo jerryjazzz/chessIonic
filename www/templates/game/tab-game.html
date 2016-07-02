@@ -7,35 +7,26 @@
         </div>
       </div>
     </div>
-    <!--<ion-item>-->
+
+    <label class="item item-input item-select">
+      <div class="input-label">
+        Depth
+      </div>
+      <select ng-model="$parent.desiredDepth" ng-init="$parent.desiredDepth=3">
+        <option >2</option>
+        <option ng-selected="selected">3</option>
+        <option >4</option>
+      </select>
+    </label>
  
-    <!--<ion-list>-->
     <ion-toggle  ng-model="$parent.multiThread">
         multiThread
     </ion-toggle>
     
-    <!--<ion-select  ng-model="settings.enableFriends">
-        Enable Friends
-    </ion-select>
-    -->
-     
-    <label class="item item-input item-select">
-    <div class="input-label">
-      Depth
-    </div>
-    <select ng-model="$parent.desiredDepth" ng-init="$parent.desiredDepth=3">
-      <option >2</option>
-      <option ng-selected="selected">3</option>
-      <option >4</option>
-    </select>
-  </label>
+    <ion-toggle  ng-show="$parent.multiThread" ng-model="$parent.fastMultiThread">
+        multiThread: fast
+    </ion-toggle>
     
-    
-    <!--</ion-list>-->
- 
- 
-
-    <!--</ion-item>-->
   </ion-content>
 </ion-view>
 

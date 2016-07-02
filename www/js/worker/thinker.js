@@ -358,6 +358,23 @@
 					}
 				})
 			}
+			
+			thinker.fastMultiThreadAi = function (game, desiredDepth, callback) {
+				var callbackId  = addCallback(callback,{
+					results: []
+				});
+				
+				
+					 
+				 mainWorker.postMessage({
+					reqCommand: 'fastMultiThreadAi',
+					reqData:{
+						game: game,
+						desiredDepth: desiredDepth,
+						callbackId: callbackId
+					}
+				})
+			}
 
 
 

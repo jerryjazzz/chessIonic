@@ -75,22 +75,33 @@ controllers.controller('gameCtrl', function($scope, $timeout, $interval) {
 
 $scope.makeAiMove = function () {
 	
-	if(!$scope.multiThread){
-  thinker.singleThreadAi($scope.game, $scope.desiredDepth, function(move){
-		
-		$scope.game = moveInTable(move.moveStr, $scope.game, false)
-  	$scope.showTable()
-		$scope.$apply();
-			
-	});
+	if($scope.multiThread){
+		if($scope.fastMultiThread){
+			thinker.fastMultiThreadAi($scope.game, $scope.desiredDepth, function(move){
+				
+				$scope.game = moveInTable(move.moveStr, $scope.game, false)
+				$scope.showTable()
+				$scope.$apply();
+					
+			});
+		}else{
+			thinker.multiThreadAi($scope.game, $scope.desiredDepth, function(move){
+				
+				$scope.game = moveInTable(move.moveStr, $scope.game, false)
+				$scope.showTable()
+				$scope.$apply();
+					
+			});
+		}
 	}else{
-	thinker.multiThreadAi($scope.game, $scope.desiredDepth, function(move){
-		
-		$scope.game = moveInTable(move.moveStr, $scope.game, false)
-  	$scope.showTable()
-		$scope.$apply();
+		thinker.singleThreadAi($scope.game, $scope.desiredDepth, function(move){
 			
-	});
+			$scope.game = moveInTable(move.moveStr, $scope.game, false)
+			$scope.showTable()
+			$scope.$apply();
+				
+		});
+		
 	}
 }
 	

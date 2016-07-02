@@ -220,7 +220,88 @@ var taskReceived = function(task) {
         
         break;
         
-		case "splitMove":
+		case "fastSplitMove":
+        
+    //  if(task.offline) console.log('OFFLINE MOVE')
+        
+      // sendSpeedStats=true;
+
+			// splitMoveStarted = new Date() // remove this!!!!!!!!!!!!!!!!!!!!
+      progress = {
+        
+        command: "fastSplitMove",
+
+        offline: task.offline,
+        callbackId: task.callbackId,
+
+				started: new Date(),
+        
+        
+
+				splitMoves: 0, //totalcount
+				//oneDeeperMoves: 0,
+				doneSM: 0, //donecount
+				//doneDM: 0,
+        //doneDmtotal: 0,
+
+				moves: task.data,
+
+				//tempDTasks: [],
+                
+        queuedMoves: [],
+        
+        shouldIDraw:task.data[0].sharedData.shouldIDraw,
+        
+        origAllPastTables:task.data[0].sharedData.origAllPastTables,
+        origTable:task.data[0].sharedData.origTable
+
+				//updatedMoves:[]
+
+			}
+
+			progress.moves.forEach(function(splitMove) {
+
+				splitMove.progress = {
+
+					moveCoords: splitMove.moveCoords,
+					moveIndex: splitMove.moveIndex,
+
+					done: false,
+					result: {},
+
+					expected: undefined,
+
+				}
+                
+        progress.queuedMoves[splitMove.moveIndex]={
+            done:false,
+            expectedIn:undefined,
+        }
+
+			})
+
+			progress.workingOnDepth = task.data[0].sharedData.desiredDepth     ;
+      workingOnDepth = progress.workingOnDepth;   //TODO: global??!!!!!!!!!!!!
+      
+      
+			if (task.data[0] != undefined) {
+				//we received some moves
+
+					progress.workingOnGameNum = task.data[0].sharedData.gameNum
+					workingOnGameNum = progress.workingOnGameNum; //TODO: global?
+					progress.splitMoves = task.data.length //count
+
+					fastMwProcessDeepSplitMoves(progress.moves, sendID) //starting to process splitmove from server
+
+
+			} else {
+				//error in receiving task
+
+			}
+
+			break;
+      
+      case "splitMove":
         
     //  if(task.offline) console.log('OFFLINE MOVE')
         
@@ -368,6 +449,30 @@ onmessage = function(event) {
       
       break;
       
+      
+      
+    case 'fastMultiThreadAi':
+    
+      var game = reqData.game; 
+      var callbackId = reqData.callbackId
+
+      game.moveTask = new MoveTaskN(game);
+      game.moveTask.sharedData.desiredDepth=reqData.desiredDepth
+      game.moveTask.sharedData.origAllPastTables = game.allPastTables
+
+      game.movesToSend = new SplitMove(game).movesToSend
+      
+      taskReceived({
+        command: 'fastSplitMove',
+        data: game.movesToSend,
+        offline: true,
+        callbackId: callbackId
+      })
+    
+     
+      
+      break; 
+           
     case 'multiThreadAi':
     
       var game = reqData.game; 
@@ -386,17 +491,7 @@ onmessage = function(event) {
         callbackId: callbackId
       })
     
-      //var move = singleThreadAi(reqData.game, reqData.desiredDepth, function(){})
-   
-      // postMessage({
-			// 	'resCommand': 'singleThreadAiSolved',
-			// 	'resMessage': 'singleThreadAiSolved',
-			// 	'resData': {
-      //     move: 'a',
-      //     callbackId: reqData.callbackId
-      //   }
-
-			// })
+     
       
       break;
 
