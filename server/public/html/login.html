@@ -1,0 +1,114 @@
+<style>
+	  .vform
+    {
+        background-color: #f3f3f3;
+        /*border: solid 1px #a1a1a1;*/
+        /*padding: 10px;*/
+        /*width: 100%;
+		*/
+		align-content: center;
+		
+    }
+    
+    .vform label, .vform input
+    {
+        display: block;
+       
+        float: left;
+        margin-bottom: 10px;
+    }
+ 
+    .vform label
+    {
+		 width: 40%;
+        text-align: right;
+        /*padding-right: 20px;*/
+    }
+  .vform div
+    {
+       align-content: center;
+       
+    }
+ 
+    br
+    {
+        clear: left;
+    }
+</style>
+
+
+
+<div class="centered lbborder vform" ng-if="screenRatio<3">
+	<table style="width:100%">
+		<tr>
+			<td width=10%> <br> </td>
+
+			<td width=35% nowrap class="centered" ng-include="'html/logform.html'">
+				
+			</td>
+			<td width=10%> <br> </td>
+		
+			<td width=35% nowrap class="centered" ng-include="'html/regform.html'">
+
+
+			</td>
+			
+			<td width=45%></td>
+			
+		</tr>
+<!--		
+		<tr>
+			
+			<td>
+				
+				<button ng-click="quickGame()">Instant Game</button>	
+			
+			
+			</td>
+			
+			
+		</tr>
+		-->
+
+	</table>
+
+</div>
+
+
+
+
+
+<div class="centered lbborder vform" ng-if="screenRatio==3">
+	<table style="width:100%">
+		<tr>
+			
+
+			<td width=100% nowrap class="centered" ng-include="'html/logform.html'">
+				
+			</td>
+		</tr>
+		<tr><br></tr>
+		<tr>
+			<td width=100% nowrap class="centered" ng-include="'html/regform.html'">
+
+
+			</td>
+			
+		</tr>
+		
+			<!--<tr>
+			
+			<td>
+				
+				<button ng-click="quickGame()">Instant Game</button>	
+			
+			
+			</td>
+			
+			
+		</tr>-->
+		
+
+	</table>
+
+</div>
