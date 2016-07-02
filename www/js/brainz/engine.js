@@ -184,22 +184,23 @@ function addMovesToTable(originalTable, whiteNext, dontClearInvalid, returnMoveS
   var myCol = 1;
   if (whiteNext) myCol++ //myCol is 2 when white
 
-    var tableWithMoves = new Array(8)
+  var tableWithMoves = new Array(8)
+  
   for (var i = 0; i < 8; i++) {
-    tableWithMoves[i] = new Array(8)
+    //tableWithMoves[i] = new Array(8)
     for (var j = 0; j < 8; j++) {
-      tableWithMoves[i][j] = originalTable[i][j].slice() //[]
+      //try{tableWithMoves[i][j] = originalTable[i][j].slice()} catch(e){console.log('@@@@@@@@@',e,originalTable[i][j])}
 
       if (originalTable[i][j][0] === myCol) {
         var returnMoveCoords = []
-        tableWithMoves[i][j][5] = canMove(i, j, whiteNext, originalTable, undefined, undefined, undefined, dontClearInvalid, returnMoveStrings) //:  canMove(k, l, isWhite, moveTable, speedy, dontProt, hitSumm, dontRemoveInvalid) { //, speedy) {
+        originalTable[i][j][5] = canMove(i, j, whiteNext, originalTable, undefined, undefined, undefined, dontClearInvalid, returnMoveStrings) //:  canMove(k, l, isWhite, moveTable, speedy, dontProt, hitSumm, dontRemoveInvalid) { //, speedy) {
       } else {
-        tableWithMoves[i][j][5] === []
+        originalTable[i][j][5] === []
       }
     }
   }
 
-  return tableWithMoves
+  return originalTable
 
 }
 
@@ -1086,9 +1087,10 @@ function moveIt(moveString, intable, dontProtect, hitValue) {
   for (var i = 0; i < 8; i++) {
     thistable[i] = new Array(8)
     for (var j = 0; j < 8; j++) {
-
-      thistable[i][j] = intable[i][j].slice(0, 4)
-
+        // thistable[i][j] = intable[i][j].slice(0, 4)  //crashes in cordova, typedArray has no slice...
+        thistable[i][j] = new Array(4);
+        for (var k = 0; k < 4; k+=1) thistable[i][j][k] = intable[i][j][k];
+      
     }
   }
 
@@ -1549,7 +1551,10 @@ function fastMove(moveString, intable, dontProtect, hitValue) {
     thistable[i] = new Array(8)
     for (var j = 0; j < 8; j++) {
 
-      thistable[i][j] = intable[i][j].slice(0, 2)
+      //thistable[i][j] = intable[i][j].slice(0, 2) //crashes in cordova
+      thistable[i][j] = new Int8Array(2)
+      thistable[i][j][0] = intable[i][j][0];
+      thistable[i][j][1] = intable[i][j][1];
 
     }
   }
