@@ -1,15 +1,14 @@
-controllers.controller('gameCtrl', function($scope, $timeout) {
-  console.log('gameCtrl started.')
+controllers.controller('gameCtrl', function($scope, $timeout, $interval) {
   
-  $scope.game = new Game(1,2,3);
+  $scope.game = new Game(1,2,3);//id, wname, bname
   $scope.game.displayedTable= angular.copy($scope.game.table);
 // xx=$scope.updateSizes
    $scope.scrw=window.screen.availWidth
   
-//   $interval(function(){
+  $interval(function(){
    
-//     //console.log(window.screen.availWidth)  
-// },1000)
+    console.log($scope.desiredDepth)  
+},1000)
 
   var store = {
     oopsStates:[]
@@ -20,56 +19,66 @@ controllers.controller('gameCtrl', function($scope, $timeout) {
   $scope.wPlayer =true;
 
 
-			
+			$scope.setDesiredDepth = function(desiredDepth){
+        $timeout(function(){
+          $scope.desiredDepth = desiredDepth;
+        },1) 
+      }
+      
+      
+      
 			$scope.makeAMove = function(whatMove, noAiMove) {
         $scope.clearHighlights($scope.game.table)
 				var moveStr = whatMove
 
-				dbTable = $scope.game
+				game = $scope.game
 
-				dbTable.command = ''
+				game.command = ''
 
-				store.oopsStates[$scope.game._id] = angular.copy(dbTable)
+				store.oopsStates[$scope.game._id] = angular.copy(game)
 
 				$scope.clearHighlights(store.oopsStates[$scope.game._id].table)
 
-				console.log('before adding pastState:', dbTable.allPastTables.length)
-				dbTable = moveInTable(moveStr, dbTable, false)
+				console.log('before adding pastState:', game.allPastTables.length)
+				var game = moveInTable(moveStr, game, false)
         
-				console.log('after adding pastState:', dbTable.allPastTables.length)
+				console.log('after adding pastState:', game.allPastTables.length)
 
-				dbTable._id = $scope.game._id
-				dbTable.desiredDepth = 3//$rootScope.depth
+				game._id = $scope.game._id
+				// game.desiredDepth = 3//$rootScope.depth
 
-				// if (dbTable.wName == 'Computer' || dbTable.bName == 'Computer') {
+				// if (game.wName == 'Computer' || game.bName == 'Computer') {
 
-				// 	dbTable.command = 'makeAiMove'
-				// 	dbTable.moveTask = new MoveTaskN(dbTable)
+				// 	game.command = 'makeAiMove'
+				// 	game.moveTask = new MoveTaskN(game)
 
 				// }
 
-			//	socketSend('moved', dbTable, 'moved', function() {
+			//	socketSend('moved', game, 'moved', function() {
 
-					$scope.game.table = dbTable.table
-					$scope.game.wNext = dbTable.wNext
-					$scope.game.moves = dbTable.moves
-
+					// $scope.game.table = game.table
+					// $scope.game.wNext = game.wNext
+					// $scope.game.moves = game.moves
+          $scope.game=game
 			//	})
+      $timeout(function(){
+        if(!noAiMove){
+          $scope.makeAiMove();
+          //$scope.showTable()
+          //$scope.$apply()
+        }
+      })
       
-      if(!noAiMove){
-        $scope.makeAiMove();
-        $scope.showTable()
-        //$scope.$apply()
-      }
       
       
 			}
 
 $scope.makeAiMove = function () {
   
-  var whatMove=singleThreadAi($scope.game,2,function(){})
+  var whatMove=singleThreadAi($scope.game, $scope.desiredDepth, function(){})
   //$scope.makeAMove(whatMove.moveStr,true)
   $scope.game = moveInTable(whatMove.moveStr, $scope.game, false)
+  $scope.showTable()
   
 }
 	
@@ -204,13 +213,13 @@ console.log($scope.game.displayedTable)
 			$rootScope.imgPathStr1 = 'cPiecesPng/'
 			$rootScope.imgPathStr2 = '.png'
 
-			testing.getDbTable = function() {
+			testing.getgame = function() {
 				return $scope.game
 			}
 
 			testing.getAi = function(depth) {
 				if (!depth) depth = 3
-				return singleThreadAi(testing.getDbTable(), depth)
+				return singleThreadAi(testing.getgame(), depth)
 			}
 
 			$rootScope.temp1 = {}
@@ -930,13 +939,13 @@ console.log($scope.game.displayedTable)
 						//if(subViewName=='default'&&$scope.game._id)subViewName=$scope.game._id
 
 						newViewParts = [
-							'dbTable.table',
-							'dbTable.chat',
-							'dbTable.moves',
+							'game.table',
+							'game.chat',
+							'game.moves',
 							'busyThinkers',
-							'dbTable.wNext',
+							'game.wNext',
 							'wPlayer',
-							'dbTable.allPastTables'
+							'game.allPastTables'
 
 						]
 

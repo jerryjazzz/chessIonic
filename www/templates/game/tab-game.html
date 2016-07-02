@@ -2,8 +2,29 @@
   <ion-content class="">
     <div class="row" style="padding: 0px">
       <div class="col" style="padding: 0px">
-        <div class="outer-cell"><wtable myclass="'main-table unselectable'" input="game.displayedTable" clickfunc="clickedItTrans" scrw="scrw"></wtable>
+        <div class="outer-cell">
+          <wtable myclass="'main-table unselectable'" input="game.displayedTable" clickfunc="clickedItTrans" scrw="scrw"></wtable>
+        </div>
       </div>
     </div>
+    <ion-item>
+  <ion-label>Gender</ion-label>
+    <!--<div class="row">
+      <div class="col">-->
+       <label class="item item-input item-select">
+    <div class="input-label">
+      Depth
+    </div>
+    <select ng-model="desiredDepth" ng-change="setDesiredDepth(desiredDepth)" ng-init="setDesiredDepth(3)">
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+    {{desiredDepth}}
+  </label>
+      <!--</div>
+    </div>-->
+    </ion-item>
   </ion-content>
 </ion-view>
+
