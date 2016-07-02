@@ -209,8 +209,8 @@ var DeepeningTask = function(smallMoveTask) { //keep this fast, designed for mai
 	this.initialTreeMoves = [this.moveStr] //to put in first smallmovetask
 
 	this.startingTable = smallMoveTask.sharedData.origTable //this was calculated in advance when getting the first moves: that resulted in this.everything
-
-    
+this.startingAllPastTables = smallMoveTask.sharedData.allPast
+  //  console.log(smallMoveTask)
 
 	this.thisTaskTable = moveIt(this.moveStr, this.startingTable, true) //this is the first and should be only time calculating this!!!!!
 		//takes time

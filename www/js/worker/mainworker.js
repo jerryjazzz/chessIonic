@@ -109,6 +109,50 @@ function workerMove(smallMoveTask, thinker) { // smallmovetask has one of my pos
 
 	}
 
+};
+
+function fastWorkerMove(smallMoveTask, thinker) { // smallmovetask has one of my possible 1st moves
+
+	var deepeningTask = new DeepeningTask(smallMoveTask)
+  
+  toSub('solveDT', deepeningTask)
+  
+  
+  
+	// oneDeeper(deepeningTask) //this will make about 30 smalldeepeningtasks from the initial 1 and create deepeningtask.resolverarray
+	// 	//first item in deepeningtask.smalldeepeningtasks is trigger
+
+	// //!!!!!!!!!!!implement !!!!!!!!!!typedarray
+
+	// progress.tempDTasks = deepeningTask
+
+	// progress.waitingSdts = []
+
+	// progress.sentSdtCount = deepeningTask.smallDeepeningTasks.length - 1
+
+	// progress.oneDeeperMoves = progress.sentSdtCount //set this splitmoves max
+    
+	// progress.doneDM = 0 //val
+  //   progress.doneDMtotal = 0 //val
+    
+
+	
+  //   for (var j = maxWorkerNum; j > 0; j--) {
+
+	// 	if (deepeningTask.smallDeepeningTasks.length > 1) {
+
+	// 		waitingForIdle++
+
+	// 		var smallDeepeningTask = deepeningTask.smallDeepeningTasks.pop()
+            
+  //           smallDeepeningTask.progress=deepeningTask.progress
+
+	// 		toSub('solveSDT', smallDeepeningTask)
+
+	// 	}
+
+	// }
+
 }
 
 function mwProcessDeepSplitMoves(data, thinker) { //mt, modConst, looped) {
@@ -120,6 +164,21 @@ function mwProcessDeepSplitMoves(data, thinker) { //mt, modConst, looped) {
 		var newData = data.pop()
 
 		workerMove(newData, thinker)
+
+	}
+	//return rtnData
+}
+
+
+function fastMwProcessDeepSplitMoves(data, thinker) { //mt, modConst, looped) {
+
+	//var rtnData = []
+
+	if (data.length > 0) {
+
+		var newData = data.pop()
+
+		fastWorkerMove(newData, thinker)
 
 	}
 	//return rtnData
@@ -219,86 +278,62 @@ var taskReceived = function(task) {
               
         
         break;
-        
-		case "fastSplitMove":
-        
-    //  if(task.offline) console.log('OFFLINE MOVE')
-        
-      // sendSpeedStats=true;
+					
+			case "fastSplitMove":
+					
+			//  if(task.offline) console.log('OFFLINE MOVE')
+				// sendSpeedStats=true;
+				var dbTable=task.game
+				var depth=task.desiredDepth;
+				console.log(depth)
+				    dbTable.moveTask=new MoveTaskN(dbTable)//,mod)
+    
+    dbTable.moveTask.sharedData.desiredDepth=depth
+    progress.callbackId=task.callbackId
+    //from server
+    var tempMoves=new SplitMove(dbTable).movesToSend
+    
+    
+    //////////from mainworker
+    tempMoves.forEach(function(splitMove) {
 
-			// splitMoveStarted = new Date() // remove this!!!!!!!!!!!!!!!!!!!!
-      progress = {
-        
-        command: "fastSplitMove",
+        splitMove.progress = {
 
-        offline: task.offline,
-        callbackId: task.callbackId,
+					
 
-				started: new Date(),
-        
-        
+            moveCoords: splitMove.moveCoords,
+            moveIndex: splitMove.moveIndex,
 
-				splitMoves: 0, //totalcount
-				//oneDeeperMoves: 0,
-				doneSM: 0, //donecount
-				//doneDM: 0,
-        //doneDmtotal: 0,
+            done: false,
+            result: {},
 
-				moves: task.data,
+            expected: undefined,
 
-				//tempDTasks: [],
-                
-        queuedMoves: [],
-        
-        shouldIDraw:task.data[0].sharedData.shouldIDraw,
-        
-        origAllPastTables:task.data[0].sharedData.origAllPastTables,
-        origTable:task.data[0].sharedData.origTable
-
-				//updatedMoves:[]
-
-			}
-
-			progress.moves.forEach(function(splitMove) {
-
-				splitMove.progress = {
-
-					moveCoords: splitMove.moveCoords,
-					moveIndex: splitMove.moveIndex,
-
-					done: false,
-					result: {},
-
-					expected: undefined,
-
-				}
-                
-        progress.queuedMoves[splitMove.moveIndex]={
-            done:false,
-            expectedIn:undefined,
         }
-
-			})
-
-			progress.workingOnDepth = task.data[0].sharedData.desiredDepth     ;
-      workingOnDepth = progress.workingOnDepth;   //TODO: global??!!!!!!!!!!!!
       
+    })
+
+    resulta={
+			count:tempMoves.length,
+			results:[]
+		}			//TODO: this is bad
+    
+    tempMoves.forEach(function(smallMoveTask,index){
+        //var dTask=new DeepeningTask(smallMoveTask)
       
-			if (task.data[0] != undefined) {
-				//we received some moves
+        toSub('fastSplitMove',{
+						dbTable:dbTable,
+						smallMoveTask: smallMoveTask,
+						index:index
+					}
+				)
+    
+    })
+    
 
-					progress.workingOnGameNum = task.data[0].sharedData.gameNum
-					workingOnGameNum = progress.workingOnGameNum; //TODO: global?
-					progress.splitMoves = task.data.length //count
-
-					fastMwProcessDeepSplitMoves(progress.moves, sendID) //starting to process splitmove from server
-
-
-			} else {
-				//error in receiving task
-
-			}
-
+			
+			
+			
 			break;
       
       case "splitMove":
@@ -456,15 +491,18 @@ onmessage = function(event) {
       var game = reqData.game; 
       var callbackId = reqData.callbackId
 
-      game.moveTask = new MoveTaskN(game);
-      game.moveTask.sharedData.desiredDepth=reqData.desiredDepth
-      game.moveTask.sharedData.origAllPastTables = game.allPastTables
+      // game.moveTask = new MoveTaskN(game);
+      // game.moveTask.sharedData.desiredDepth=reqData.desiredDepth
+      // game.moveTask.sharedData.origAllPastTables = game.allPastTables
 
-      game.movesToSend = new SplitMove(game).movesToSend
+      // game.movesToSend = new SplitMove(game).movesToSend
       
       taskReceived({
         command: 'fastSplitMove',
-        data: game.movesToSend,
+        data: {},//game.movesToSend,
+				game: game,
+				desiredDepth: reqData.desiredDepth,
+				
         offline: true,
         callbackId: callbackId
       })
@@ -529,6 +567,56 @@ onmessage = function(event) {
 
 			
 			break;
+			
+		case 'fastSplitMoveSolved':
+		
+			resulta.results.push(event.data.reqData)
+			resulta.count-=1;
+			if (!resulta.count){
+				console.log('done', resulta.results)
+				var result = resulta.results
+				    
+    result.sort(function(a,b){
+        
+        if(a.score<b.score){
+            return 1
+        }else{
+            if(a.score==b.score){
+                return 0
+            }else{
+                return -1
+            }
+        }
+        
+    })
+    
+    var finalResult={
+        result:result,
+        winningMove:result[0],
+        moveStr:result[0].moveTree.slice(0,4)
+    }
+    //res.winningMove=res[0]
+    
+    //if(cb)cb(finalResult)
+    
+    //return finalResult
+			 postMessage({
+				'resCommand': 'singleThreadAiSolved',
+				'resMessage': 'singleThreadAiSolved',
+				'resData': {
+          move: finalResult,
+          callbackId: progress.callbackId
+        }
+
+			})
+			
+				
+				
+			}
+		
+		
+			break;
+
 
 		case 'sdtSolved':
         
@@ -885,6 +973,10 @@ onmessage = function(event) {
             
 
 			break;
+			
+			default:
+			
+				console.log('@@@Unhandled:', reqCommand, reqData)
 
 	}
 

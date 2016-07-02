@@ -360,6 +360,7 @@
 			}
 			
 			thinker.fastMultiThreadAi = function (game, desiredDepth, callback) {
+				//if(!callback)callback=function(){};
 				var callbackId  = addCallback(callback,{
 					results: []
 				});
