@@ -75,20 +75,16 @@ controllers.controller('gameCtrl', function($scope, $timeout, $interval) {
 
 $scope.makeAiMove = function () {
   
-	mainWorker.postMessage({
-		reqCommand: 'singleThreadAi',
-		reqData:{
-			game: $scope.game,
-			desiredDepth: $scope.desiredDepth
-		}
-	})
 	
-	console.log(mainWorker)
-	
-  var whatMove=singleThreadAi($scope.game, $scope.desiredDepth, function(){})
-  //$scope.makeAMove(whatMove.moveStr,true)
-  $scope.game = moveInTable(whatMove.moveStr, $scope.game, false)
-  $scope.showTable()
+  thinker.singleThreadAi($scope.game, $scope.desiredDepth, function(move){
+		
+		$scope.game = moveInTable(move.moveStr, $scope.game, false)
+  	$scope.showTable()
+		$scope.$apply();
+			
+	});
+
+  
   
 }
 	

@@ -344,10 +344,15 @@ onmessage = function(event) {
       
     case 'singleThreadAi':
     
+      var move = singleThreadAi(reqData.game, reqData.desiredDepth, function(){})
+   
       postMessage({
-				'resCommand': 'toConsole',
-				'resMessage': 'goThat',
-				'resData': {}
+				'resCommand': 'singleThreadAiSolved',
+				'resMessage': 'singleThreadAiSolved',
+				'resData': {
+          move: move,
+          callbackId: reqData.callbackId
+        }
 
 			})
       
