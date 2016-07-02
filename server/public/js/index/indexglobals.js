@@ -58,18 +58,22 @@
 		//load cookies
 
 		cookieId = getCookie("myID");
-		cookieIdRnd = getCookie("rndId");
+		cookieIdRnd =''// getCookie("rndId");
 
+		
 		clientMongoId = getCookie("clientMongoId");
 		userMongoId = getCookie("userMongoId");
 
+		if(clientMongoId == 'undefined') clientMongoId=""
+		setCookie("clientMongoId", clientMongoId, 365)
+		
 
-
-		if (cookieIdRnd == "") {
+		//if (cookieIdRnd == "") {
 			cookieIdRnd = (Math.random() * Math.random()).toString()
 			setCookie("rndId", cookieIdRnd, 365)
-		}
-
+		//}
+		console.log([cookieId, cookieIdRnd, clientMongoId, userMongoId])
+		
 		//console.log('cookieIdRnd', cookieIdRnd)
 
 		if (workerSpeed == "" || isNaN(workerSpeed)) {
