@@ -17,7 +17,7 @@ controllers.controller('gameCtrl', function($scope, $timeout, $interval) {
   var tempMoveStr = '';
   
   $scope.wPlayer =true;
-
+  //$scope.desiredDepth =3
 
 			$scope.setDesiredDepth = function(desiredDepth){
         $timeout(function(){
