@@ -122,6 +122,13 @@
 				
 				break;
 				
+				case 'toConsole':
+				
+					console.log(event.data)
+				
+				
+				default:
+				
 			}
 		}
 				

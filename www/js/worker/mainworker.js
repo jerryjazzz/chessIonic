@@ -320,7 +320,11 @@ var taskReceived = function(task) {
 
 		
 			break;
-
+      
+      
+    
+    default:
+    
 	}
 
 	
@@ -337,6 +341,18 @@ onmessage = function(event) {
 		case undefined:
 
 			break;
+      
+    case 'singleThreadAi':
+    
+      postMessage({
+				'resCommand': 'toConsole',
+				'resMessage': 'goThat',
+				'resData': {}
+
+			})
+      
+      break;
+
 
 		case 'echo':
 

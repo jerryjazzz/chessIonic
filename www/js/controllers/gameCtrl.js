@@ -5,10 +5,10 @@ controllers.controller('gameCtrl', function($scope, $timeout, $interval) {
 // xx=$scope.updateSizes
    $scope.scrw=window.screen.availWidth
   
-  $interval(function(){
+//   $interval(function(){
    
-    console.log($scope.desiredDepth)  
-},1000)
+//     console.log($scope.desiredDepth)  
+// },1000)
 
   var store = {
     oopsStates:[]
@@ -39,10 +39,10 @@ controllers.controller('gameCtrl', function($scope, $timeout, $interval) {
 
 				$scope.clearHighlights(store.oopsStates[$scope.game._id].table)
 
-				console.log('before adding pastState:', game.allPastTables.length)
+				//console.log('before adding pastState:', game.allPastTables.length)
 				var game = moveInTable(moveStr, game, false)
         
-				console.log('after adding pastState:', game.allPastTables.length)
+				//console.log('after adding pastState:', game.allPastTables.length)
 
 				game._id = $scope.game._id
 				// game.desiredDepth = 3//$rootScope.depth
@@ -75,6 +75,16 @@ controllers.controller('gameCtrl', function($scope, $timeout, $interval) {
 
 $scope.makeAiMove = function () {
   
+	mainWorker.postMessage({
+		reqCommand: 'singleThreadAi',
+		reqData:{
+			game: $scope.game,
+			desiredDepth: $scope.desiredDepth
+		}
+	})
+	
+	console.log(mainWorker)
+	
   var whatMove=singleThreadAi($scope.game, $scope.desiredDepth, function(){})
   //$scope.makeAMove(whatMove.moveStr,true)
   $scope.game = moveInTable(whatMove.moveStr, $scope.game, false)
@@ -89,7 +99,6 @@ $scope.makeAiMove = function () {
 $scope.showTable = function(cb) { //this will update the displayed table
 
 				$scope.game.displayedTable = angular.copy($scope.game.table)
-console.log($scope.game.displayedTable)
 				if (cb) {
 					cb()
 

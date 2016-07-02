@@ -40,8 +40,6 @@ appModule.directive('wtable', function() {
                   
                     scope.$watch('input',function(oldValue,newValue){
                         
-                        console.log('si',scope.input,'o',oldValue,'n',newValue)
-                       
                         if(scope.input&&oldValue&&newValue){
                        
                         var changed=false
