@@ -9,7 +9,7 @@ services.factory('socketService', function($rootScope) {
       
       socket.connect = function(){
         
-        socket.socketOn = true
+        
 
         // Let us open a web socket
         socket.ws = new WebSocket('ws://' + document.location.host + '/sockets/');
@@ -17,6 +17,7 @@ services.factory('socketService', function($rootScope) {
           
         socket.ws.onopen = function () {
           // Web Socket is connected, send data using send()
+          socket.socketOn = true
 
           socketSend = function (command, data, message, cb) {
 
@@ -65,6 +66,10 @@ services.factory('socketService', function($rootScope) {
           
         
         
+      };
+      
+      socket.disconnect = function () {
+        
       }
       
      
@@ -91,11 +96,11 @@ services.factory('socketService', function($rootScope) {
     
     goOnline: function () {
       
-      socket.connect()
+      socket.connect();
       
     },
     goOffline: function () {
-      socket.disconnect()
+      socket.disconnect();
     },
     
   };
