@@ -2,9 +2,9 @@ controllers.controller('settingsCtrl', function($scope, $rootScope, $interval, s
  
   $rootScope.settingsTab.online = socketService.isOnline()
  
-  $interval(function () {
-    console.log($rootScope.settingsTab)
-  },1000)
+  // $interval(function () {
+  //   console.log($rootScope.settingsTab)
+  // },1000)
   
   $scope.changeOnlineStatus = function (goOnline) {
     

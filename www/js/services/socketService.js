@@ -1,4 +1,4 @@
-services.factory('socketService', function($rootScope) {
+services.factory('socketService', function($rootScope, $timeout) {
 
   var socket = new function () {
   
@@ -9,24 +9,22 @@ services.factory('socketService', function($rootScope) {
       
       socket.connect = function(){
         
-        
-
         // Let us open a web socket
-        socket.ws = new WebSocket('ws://' + document.location.host + '/sockets/');
+        socket.ws = new WebSocket('ws://' + document.location.hostname + ':3000/sockets/');
 
           
         socket.ws.onopen = function () {
           // Web Socket is connected, send data using send()
           socket.socketOn = true
 
-          socketSend = function (command, data, message, cb) {
+          socket.send = function (command, data, message, cb) {
 
             var sendThis = {
 
               command: command,
               data: data,
               message: message,
-              socketID: socketID
+              //socketID: socketID
             }
 
             if (!cb) {
@@ -39,29 +37,34 @@ services.factory('socketService', function($rootScope) {
 
           console.log("socket connected, let's say hello...")
 
-          socketSend('Hello', {
-            cookieIdRnd: cookieIdRnd,
-            clientMongoId: clientMongoId
+          socket.send('Hello', {
+            // cookieIdRnd: cookieIdRnd,
+            // clientMongoId: clientMongoId
           }, 'Hello', function () {})
 
         };
 
         socket.ws.onmessage = function (evt) {
-          wsOnmessageFunc(evt, $rootScope, $scope, ws, indexGlobals)
+          
+          console.log('onmessage',evt)
+          
+          //wsOnmessageFunc(evt, $rootScope, $scope, ws, indexGlobals)
         }
 
        socket.ws.onclose = function () {
           // websocket is closed.
 
-          socketOn = false
+          socket.socketOn = false
 
           socketID = undefined
 
-          console.log("socketConnection is closed, retry in 2s..");
-
-          window.setTimeout(function () {
-            if (!socketOn && $rootScope.settingsTab.online) socket.connect()
-          }, 2000)
+          if ($rootScope.settingsTab.online) {
+            console.log("socketConnection is closed, retry in 2s..");
+             $timeout(function () {
+                if (!socketOn && $rootScope.settingsTab.online) socket.connect()
+              }, 2000)
+          }
+         
         };
           
         
@@ -69,7 +72,8 @@ services.factory('socketService', function($rootScope) {
       };
       
       socket.disconnect = function () {
-        
+        socket.ws.close()
+        socket.ws = undefined;
       }
       
      
