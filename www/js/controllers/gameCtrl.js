@@ -69,7 +69,7 @@ $scope.makeAiMove = function () {
 	
 	// if($scope.multiThread){
 	// 	if($scope.fastMultiThread){
-			thinker.fastMultiThreadAi($scope.game, $scope.desiredDepth, function(move){
+			thinker.fastMultiThreadAi($scope.game, $rootScope.settingsTab.desiredDepth, function(move){
 				
 				$scope.game = moveInTable(move.moveStr, $scope.game, false)
 				$scope.showTable()

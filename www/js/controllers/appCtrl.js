@@ -1,5 +1,7 @@
 controllers.controller('appCtrl', function ($scope, $rootScope, $interval, $cordovaDevice, $ionicLoading, socketService, deviceService) {
-  $rootScope.settingsTab = {}
+  $rootScope.settingsTab = {
+    desiredDepth: "2"
+  };
   
 
   $rootScope.showLoading = function (text) {

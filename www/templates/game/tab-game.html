@@ -8,16 +8,34 @@
       </div>
     </div>
 
+    <ion-list>
+    <ion-toggle ng-model="settingsTab.useOnlineGrid" ng-change="" ng-disabled="!isConnected" ng-show="settingsTab.online">
+       <span> Use online grid </span><span class="spinner" ng-show="!!isConnected != !!settingsTab.online"><ion-spinner icon="spiral" class="spinner"></ion-spinner></span>
+    </ion-toggle>
+    
+
+
     <label class="item item-input item-select">
       <div class="input-label">
         Depth
       </div>
-      <select ng-model="$parent.desiredDepth" ng-init="$parent.desiredDepth=2">
+      
+      <!--ng-init="settingsTab.desiredDepth=2"-->
+      <select ng-model="settingsTab.desiredDepth">
         <option >2</option>
-        <option ng-selected="selected">3</option>
+        <option >3</option>
         <option >4</option>
       </select>
     </label>
+    
+    <ion-toggle ng-model="settingsTab.publishGame" ng-change="" ng-disabled="false" ng-show="settingsTab.online">
+       <span> Publish game </span><span class="spinner" ng-show="false"><ion-spinner icon="spiral" class="spinner"></ion-spinner></span>
+    </ion-toggle>
+    
+    
+    </ion-list>
+    
+    
 <!-- 
     <ion-toggle  ng-model="$parent.multiThread">
         multiThread
