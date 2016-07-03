@@ -120,7 +120,7 @@ appModule.directive('wtable', function() {
                    
                 },
 				template: '<table class="{{myclass}}" onload="updateSizes()">\
-							<tr class="heading row0 {{headingclass}}" style="width:{{scrw}}px">\
+							<tr class="heading row0 {{headingclass}}" style="width:{{scrw}}px; height:1px">\
 								<td class="left-column {{headingclass}}"></td>\
 								<td>A</td>\
 								<td>B</td>\
@@ -131,11 +131,11 @@ appModule.directive('wtable', function() {
 								<td>G</td>\
 								<td>H</td>\
 							</tr>\
-							<tr ng-repeat="(xIndex, x) in outTable track by $index">\
+							<tr ng-repeat="(xIndex, x) in outTable track by $index" style="height: {{imgh || scrw*0.11945}}">\
 								<td class="left-column {{headingclass}}">{{8-$index}}</td>\
 								<td ng-repeat="(yIndex, y) in x track by $index" ng-tap="clickfunc(xIndex+1,yIndex)" ng-class="{ darker: y[7], square: !y[7]}">\
-									<div ng-class="divAroundIt">\
-										<img ng-src="{{\'cPiecesPng/\'+y[0]+y[1]+\'.png\'}}" height="{{imgh || scrw*0.11945}}" width="{{imgw || scrw*0.11945}}" ng-class="{ selected: y[8]||y[9], selected2: y[15]}">\
+									<div ng-class="divAroundIt" style="height: {{imgh || scrw*0.11945}}px">\
+										<img ng-src="{{\'cPiecesPng/\'+y[0]+y[1]+\'.png\'}}" height="{{imgh || scrw*0.11945}}px" width="{{imgw || scrw*0.11945}}" ng-class="{ selected: y[8]||y[9], selected2: y[15]}">\
 									</div>\
 								</td>\
 							</tr>\
