@@ -4,6 +4,8 @@ var morgan = require('morgan');
 var bodyParser = require("body-parser");
 var fs = require('fs');
 
+var cors = require('cors');
+
 var http = require('http')
 var WebSocketServer = require('websocket').server;
 
@@ -19,10 +21,11 @@ var Clients = require('./public/js/server/clients.js')
 var clients=new Clients(dbFuncs)
 
 var app = express()
+app.use(cors())
 
 var httpServ = http.createServer(app)
 
-var server = httpServ.listen(3000, function() {
+var server = httpServ.listen(4000, function() {
 	var host = server.address()
 		.address;
 	var port = server.address()
@@ -30,11 +33,44 @@ var server = httpServ.listen(3000, function() {
 	console.log('app listening at http://%s:%s', host, port);
 });
 
+
+
+
+//Function for starting socket.io
+// function startSocket(serv) {
+//     console.log("Starting socket");
+
+//     //params for socket.io
+//     var options = {
+//         transports: ['websocket'],
+//         allowUpgrades: false,
+//         upgrade: false,
+//         cookie: false
+//     };
+
+//     //start socket.io
+//    var io = require('socket.io')(serv, options);
+
+//     io.on('connection', function (socket) {
+//         //Whan have user send 'test' message for him
+//         socket.emit('test', 'It Works!');
+//     });
+		
+// 		return io
+// }
+//var io = startSocket(httpServ);
+
+// io.on('connection', function(socket){
+//   socket.emit('an event', { some: 'data' });
+// });
+
 var wsServer = new WebSocketServer({
     
 	httpServer: httpServ,
 	
-	path: '/sockets/'
+	path: '/sockets/',
+	
+	autoAcceptConnections: false
     
 });
 

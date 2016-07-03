@@ -54,12 +54,12 @@ appModule.config(function($stateProvider, $urlRouterProvider) {
       }
     })
 
-  .state('tab.account', {
-    url: '/account',
+  .state('tab.settings', {
+    url: '/settings',
     views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+      'tab-settings': {
+        templateUrl: 'templates/settings/tab-settings.html',
+        controller: 'settingsCtrl'
       }
     }
   });

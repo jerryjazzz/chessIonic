@@ -1,9 +1,9 @@
-controllers.controller('gameCtrl', function($scope, $timeout, $interval) {
+controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $interval, speedTestService) {
   //console.log('ran')
   $scope.game = new Game(1,2,3);//id, wname, bname
   $scope.game.displayedTable= angular.copy($scope.game.table);
 // xx=$scope.updateSizes
-   $scope.scrw=window.screen.availWidth
+  $scope.scrw = window.screen.availWidth
   
 //   $interval(function(){
    
@@ -107,7 +107,7 @@ $scope.makeAiMove = function () {
 	
 //scope=$scope
 
-
+$rootScope.showLoading('aa')
 
 $scope.showTable = function(cb) { //this will update the displayed table
 
