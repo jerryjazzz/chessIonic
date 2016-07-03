@@ -19,8 +19,3 @@ controllers.controller('DashCtrl', function($scope) {})
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
-});
