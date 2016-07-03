@@ -1,14 +1,23 @@
-controllers.controller('appCtrl', function($scope, $rootScope, $interval, $cordovaDevice, socketService) {
+controllers.controller('appCtrl', function($scope, $rootScope, $interval, $cordovaDevice, $ionicLoading, socketService) {
   $rootScope.settingsTab = {}
   $rootScope.device={}
   
   $rootScope.isDevice = function () {
-    
+    return (window.cordova || window.PhoneGap || window.phonegap) 
+      && /^file:\/{3}[^\/]/i.test(window.location.href) 
+      && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
+  };
   
-        return (window.cordova || window.PhoneGap || window.phonegap) 
-        && /^file:\/{3}[^\/]/i.test(window.location.href) 
-        && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
-    }
+  $rootScope.showLoading = function(text) {
+    $ionicLoading.show({
+      template: text,
+      showBackdrop: false
+    });
+  };
+  
+  $rootScope.hideLoading = function(){
+    $ionicLoading.hide();
+  };
 
   
   if ($rootScope.isDevice()) console.log('this is a device')
