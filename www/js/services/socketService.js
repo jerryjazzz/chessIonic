@@ -10,10 +10,10 @@ services.factory('socketService', function($rootScope, $timeout) {
       socket.connect = function(){
         
         // Let us open a web socket
-        socket.ws = new WebSocket('ws://' + document.location.hostname + ':3000/sockets/');
+        socket.ws = new WebSocket('ws://miki.ddns.net/sockets/');
 
           
-        socket.ws.onopen = function () {
+        socket.ws.onopen = function (vmi) {
           // Web Socket is connected, send data using send()
           socket.socketOn = true
 
@@ -31,12 +31,14 @@ services.factory('socketService', function($rootScope, $timeout) {
               var cb = function () {}
             }
 
-            socket.ws.send(JSON.stringify(sendThis), cb());
+            socket.ws.send(JSON.stringify(sendThis), cb);
 
           }
 
-          console.log("socket connected, let's say hello...")
+          console.log("socket connected, let's say hello...",vmi)
 
+          console.log(socket.ws.__proto__)
+          socket.ws.send = socket.ws.__proto__.send
           socket.send('Hello', {
             // cookieIdRnd: cookieIdRnd,
             // clientMongoId: clientMongoId
@@ -61,7 +63,7 @@ services.factory('socketService', function($rootScope, $timeout) {
           if ($rootScope.settingsTab.online) {
             console.log("socketConnection is closed, retry in 2s..");
              $timeout(function () {
-                if (!socketOn && $rootScope.settingsTab.online) socket.connect()
+                if (!socket.socketOn && $rootScope.settingsTab.online) socket.connect()
               }, 2000)
           }
          

@@ -4,6 +4,8 @@ var morgan = require('morgan');
 var bodyParser = require("body-parser");
 var fs = require('fs');
 
+var cors = require('cors');
+
 var http = require('http')
 var WebSocketServer = require('websocket').server;
 
@@ -19,6 +21,7 @@ var Clients = require('./public/js/server/clients.js')
 var clients=new Clients(dbFuncs)
 
 var app = express()
+app.use(cors())
 
 var httpServ = http.createServer(app)
 
