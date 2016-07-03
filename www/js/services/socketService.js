@@ -1,18 +1,39 @@
 services.factory('socketService', function($rootScope, $timeout) {
-
+//console.log($websocket)
   var socket = new function () {
+  
+    
   
     var socket = this;
     
     if ("WebSocket" in window) {
       console.log('Websockets supported.')
+      console.log('WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW Window',window);
+      
       
       socket.connect = function(){
         
         // Let us open a web socket
         socket.ws = new WebSocket('ws://miki.ddns.net/sockets/');
+        var socket_host = 'http://localhost:3000'//window.location.origin + ':8080';
 
-          
+        //use only websocket, disallow upgrade
+        var socket_args = {
+            transports: ['websocket'],
+            upgrade: false,
+            cookie: false
+        };
+
+        //Create socket
+        // var socketIo = io(socket_host, socket_args);
+
+        // //Listen for 'test' message
+        // socketIo.on('test', function (data) {
+        //     console.log(data);
+        // });
+        // //var socketIo = io.connect('http://localhost:3000', {path: '/socket.io/'});
+        // //var socketIo = io.connect('http://localhost:3000', {path: '/sockets/'});
+        // socketIo.emit({a:1})  
         socket.ws.onopen = function (vmi) {
           // Web Socket is connected, send data using send()
           socket.socketOn = true
