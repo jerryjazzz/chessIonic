@@ -37,6 +37,8 @@ services.factory('socketService', function($rootScope, $timeout) {
         socket.ws.onopen = function (vmi) {
           // Web Socket is connected, send data using send()
           socket.socketOn = true
+          
+          var sender = this;
 
           socket.send = function (command, data, message, cb) {
 
@@ -52,18 +54,24 @@ services.factory('socketService', function($rootScope, $timeout) {
               var cb = function () {}
             }
 
-            socket.ws.send(JSON.stringify(sendThis), cb);
+            sender.send(JSON.stringify(sendThis), cb);
 
           }
 
           console.log("socket connected, let's say hello...",vmi)
 
-          console.log(socket.ws.__proto__)
-          socket.ws.send = socket.ws.__proto__.send
-          socket.send('Hello', {
-            // cookieIdRnd: cookieIdRnd,
-            // clientMongoId: clientMongoId
-          }, 'Hello', function () {})
+          console.log(socket.ws)
+         // socket.ws.send = socket.ws.__proto__.send
+                    
+          $timeout(function(){
+           socket.send('Hello', {
+             a:1
+              // cookieIdRnd: cookieIdRnd,
+              // clientMongoId: clientMongoId
+            }, 'Hello', function () {})
+ 
+          },4000)          
+          
 
         };
 
