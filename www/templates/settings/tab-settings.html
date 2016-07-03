@@ -1,7 +1,7 @@
 <ion-view view-title="Settings">
   <ion-content>
     <ion-list>
-    <ion-toggle  ng-model="settings.online">
+    <ion-toggle ng-model="settingsTab.online" ng-change="changeOnlineStatus(settingsTab.online)">
         Online
     </ion-toggle>
     </ion-list>
