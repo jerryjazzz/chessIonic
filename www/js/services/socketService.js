@@ -86,8 +86,8 @@ services.factory('socketService', function($rootScope, $timeout) {
                     
           socket.send('Hello', {
              //isIonicClient: $rootScope.device.ismobile,
-             device: $rootScope.device
-              // cookieIdRnd: cookieIdRnd,
+             device: $rootScope.device,
+             cookieIdRnd: JSON.stringify($rootScope.device),
               // clientMongoId: clientMongoId
             }, 'Hello', function () {})
  

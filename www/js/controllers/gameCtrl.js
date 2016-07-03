@@ -1,14 +1,10 @@
-controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $interval, speedTestService) {
-  //console.log('ran')
-  $scope.game = new Game(1,2,3);//id, wname, bname
-  $scope.game.displayedTable= angular.copy($scope.game.table);
-// xx=$scope.updateSizes
+controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $interval) {
+  
+
   $scope.scrw = window.screen.availWidth
   
-//   $interval(function(){
-   
-//     console.log($scope.desiredDepth, $scope.multiThread)  
-// },1000)
+	$scope.game = new Game(1,2,3);//id, wname, bname
+  $scope.game.displayedTable= angular.copy($scope.game.table);
 
   var store = {
     oopsStates:[]
@@ -19,11 +15,7 @@ controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $inter
   $scope.wPlayer =true;
   //$scope.desiredDepth =3
 
-			$scope.setDesiredDepth = function(desiredDepth){
-        $timeout(function(){
-          $scope.desiredDepth = desiredDepth;
-        },1) 
-      }
+		
       
       
       
@@ -106,8 +98,6 @@ $scope.makeAiMove = function () {
 }
 	
 //scope=$scope
-
-$rootScope.showLoading('aa')
 
 $scope.showTable = function(cb) { //this will update the displayed table
 
