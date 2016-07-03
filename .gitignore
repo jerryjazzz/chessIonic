@@ -7,3 +7,4 @@ plugins/
 
 server/data
 server/node_modules
+server/nohup.out
