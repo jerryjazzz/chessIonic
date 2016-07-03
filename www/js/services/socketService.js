@@ -7,23 +7,26 @@ services.factory('socketService', function($rootScope, $timeout) {
     var socket = this;
     
     if ("WebSocket" in window) {
-      console.log('Websockets supported.')
-      console.log('WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW Window',window);
+      console.log('Websockets found in window.')
       
       
       socket.connect = function(){
         
         // Let us open a web socket
-        socket.ws = new WebSocket('ws://miki.ddns.net/sockets/');
-        var socket_host = 'http://localhost:3000'//window.location.origin + ':8080';
+        socket.ws = new WebSocket('ws://miki.ddns.net/sockets/');//,["WebSocket"]);
+                // socket.ws = new WebSocket('ws://localhost:3000/sockets/');//,["WebSocket"]);
 
-        //use only websocket, disallow upgrade
-        var socket_args = {
-            transports: ['websocket'],
-            upgrade: false,
-            cookie: false
-        };
+        // var socket_host = 'http://localhost:3000'//window.location.origin + ':8080';
 
+        // //use only websocket, disallow upgrade
+        // var socket_args = {
+        //     transports: ['websocket'],
+        //     upgrade: false,
+        //     cookie: false
+        // };
+        socket.ws.onerror = function (err){
+          throw new Error(err);
+        }
         //Create socket
         // var socketIo = io(socket_host, socket_args);
 
@@ -34,11 +37,18 @@ services.factory('socketService', function($rootScope, $timeout) {
         // //var socketIo = io.connect('http://localhost:3000', {path: '/socket.io/'});
         // //var socketIo = io.connect('http://localhost:3000', {path: '/sockets/'});
         // socketIo.emit({a:1})  
-        socket.ws.onopen = function (vmi) {
+        socket.ws.onopen = function (openEvent) {
           // Web Socket is connected, send data using send()
+          
+          console.log('WebSocket opened, event.target:', openEvent.target)
+          
+          socket.openedSocket = openEvent.target;
+          
           socket.socketOn = true
           
-          var sender = this;
+          
+          
+          //var sender = this;
 
           socket.send = function (command, data, message, cb) {
 
@@ -54,11 +64,11 @@ services.factory('socketService', function($rootScope, $timeout) {
               var cb = function () {}
             }
 
-            sender.send(JSON.stringify(sendThis), cb);
+            socket.openedSocket.send(JSON.stringify(sendThis), cb);
 
           }
 
-          console.log("socket connected, let's say hello...",vmi)
+          console.log("socket connected, let's say hello...")
 
           console.log(socket.ws)
          // socket.ws.send = socket.ws.__proto__.send

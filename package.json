@@ -17,7 +17,8 @@
     "shelljs": "^0.3.0"
   },
   "cordovaPlugins": [
-    "cordova-plugin-websocket"
+    "cordova-plugin-websocket",
+    "cordova-plugin-device"
   ],
   "cordovaPlatforms": [
     "android"
