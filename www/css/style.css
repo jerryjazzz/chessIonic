@@ -265,7 +265,7 @@
 }
 span.spinner {
     
-    position: fixed;
+    position: absolute;
     top: 13px;
     bottom: 0;
     right: 100px;
