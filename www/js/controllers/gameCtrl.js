@@ -105,7 +105,7 @@ $scope.makeAiMove = function () {
 	// }
 }
 	
-scope=$scope
+//scope=$scope
 
 
 
