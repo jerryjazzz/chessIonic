@@ -14,27 +14,6 @@ services.factory('socketService', function($rootScope, $timeout) {
         
         // Let us open a web socket
         socket.ws = new WebSocket('ws://miki.ddns.net:3000/sockets/');//,["WebSocket"]);
-                // socket.ws = new WebSocket('ws://localhost:3000/sockets/');//,["WebSocket"]);
-
-        // var socket_host = 'http://localhost:3000'//window.location.origin + ':8080';
-
-        // //use only websocket, disallow upgrade
-        // var socket_args = {
-        //     transports: ['websocket'],
-        //     upgrade: false,
-        //     cookie: false
-        // };
-        
-        //Create socket
-        // var socketIo = io(socket_host, socket_args);
-
-        // //Listen for 'test' message
-        // socketIo.on('test', function (data) {
-        //     console.log(data);
-        // });
-        // //var socketIo = io.connect('http://localhost:3000', {path: '/socket.io/'});
-        // //var socketIo = io.connect('http://localhost:3000', {path: '/sockets/'});
-        // socketIo.emit({a:1})  
         
         socket.ws.onmessage = function (evt) {
           
@@ -43,8 +22,8 @@ services.factory('socketService', function($rootScope, $timeout) {
           //wsOnmessageFunc(evt, $rootScope, $scope, ws, indexGlobals)
         }
         
-        socket.ws.onerror = function (err, e2){
-          console.log('Error:',err, e2)
+        socket.ws.onerror = function (err){
+          console.log('Error:',err)
           throw new Error(err);
           
         }
@@ -53,6 +32,9 @@ services.factory('socketService', function($rootScope, $timeout) {
           // websocket is closed.
 
           socket.socketOn = false
+          $rootScope.isConnected = false;
+          $rootScope.$apply();
+          
 
           socketID = undefined
 
@@ -73,7 +55,8 @@ services.factory('socketService', function($rootScope, $timeout) {
           socket.openedSocket = openEvent.target;
           
           socket.socketOn = true
-          
+          $rootScope.isConnected = true;
+          $rootScope.$apply();
           
           
           //var sender = this;
@@ -101,16 +84,13 @@ services.factory('socketService', function($rootScope, $timeout) {
           //console.log(socket.ws)
          // socket.ws.send = socket.ws.__proto__.sendconsole.log(err)
                     
-          $timeout(function(){
-           socket.send('Hello', {
-             a:1
+          socket.send('Hello', {
+             //isIonicClient: $rootScope.device.ismobile,
+             device: $rootScope.device
               // cookieIdRnd: cookieIdRnd,
               // clientMongoId: clientMongoId
             }, 'Hello', function () {})
  
-          },4000)          
-          
-
         };
 
         

@@ -263,6 +263,24 @@
 .xc {
   display: inline-block;
 }
+span.spinner {
+    
+    position: fixed;
+    top: 13px;
+    bottom: 0;
+    right: 100px;
+    height: 10px;
+    width: 10px;
+    vertical-align: middle;
+    
+}
+
+
+
+.spinner svg {
+   /*top: 4px;*/
+   vertical-align: middle;
+}
 
 .radial {
 	 
