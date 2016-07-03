@@ -95,6 +95,7 @@
 .outer-cell {
   text-align: center;
   text-align: -webkit-center;
+  
 }
 
 .darker {
@@ -111,14 +112,20 @@
 }
 
 .heading {
-  height: 24px;
+  height: 3vw;
+  width: 3vw;
+  
+  line-height: 3vw;
+  
   background-color: grey;
+  font-size: 3vw;
+ 
+  vertical-align: middle;
+
 }
 
 .left-column {
-  width: 24px;
-  background-color: grey;
-  vertical-align: middle;
+  
 }
 
 .main-table {
