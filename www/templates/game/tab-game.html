@@ -9,8 +9,8 @@
     </div>
 
     <ion-list>
-    <ion-toggle ng-model="settingsTab.useOnlineGrid" ng-change="" ng-disabled="!isConnected" ng-show="settingsTab.online">
-       <span> Use online grid </span><span class="spinner" ng-show="!!isConnected != !!settingsTab.online"><ion-spinner icon="spiral" class="spinner"></ion-spinner></span>
+    <ion-toggle ng-model="settingsTab.useOnlineGrid" ng-change="settingsTab.setUseOnlineGrid( settingsTab.useOnlineGrid )" ng-disabled="!isConnected" ng-show="settingsTab.goOnline">
+       <span> Use online grid (Coming soon)</span><span class="spinner" ng-show="!!isConnected != !!settingsTab.goOnline"><ion-spinner icon="spiral" class="spinner"></ion-spinner></span>
     </ion-toggle>
     
 
@@ -28,8 +28,8 @@
       </select>
     </label>
     
-    <ion-toggle ng-model="settingsTab.publishGame" ng-change="" ng-disabled="false" ng-show="settingsTab.online">
-       <span> Publish game </span><span class="spinner" ng-show="false"><ion-spinner icon="spiral" class="spinner"></ion-spinner></span>
+    <ion-toggle ng-model="settingsTab.publishGame" ng-change="settingsTab.setPublishGame( settingsTab.publishGame )" ng-disabled="false" ng-show="settingsTab.goOnline">
+       <span> Publish game (Coming soon)</span><span class="spinner" ng-show="!!isConnected != !!settingsTab.goOnline"><ion-spinner icon="spiral" class="spinner"></ion-spinner></span>
     </ion-toggle>
     
     

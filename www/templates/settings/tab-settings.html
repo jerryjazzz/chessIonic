@@ -1,8 +1,8 @@
 <ion-view view-title="Settings">
   <ion-content>
     <ion-list>
-    <ion-toggle ng-model="settingsTab.online" ng-change="changeOnlineStatus(settingsTab.online)">
-       <span> Online </span><span class="spinner" ng-show="!!isConnected != !!settingsTab.online"><ion-spinner icon="spiral" class="spinner"></ion-spinner></span>
+    <ion-toggle ng-model="settingsTab.goOnline" ng-change="settingsTab.setGoOnline( settingsTab.goOnline )">
+       <span> Online </span><span class="spinner" ng-show="!!isConnected != !!settingsTab.goOnline"><ion-spinner icon="spiral" class="spinner"></ion-spinner></span>
     </ion-toggle>
     </ion-list>
   </ion-content>

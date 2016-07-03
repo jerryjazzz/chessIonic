@@ -28,7 +28,7 @@
 			};
 			
 			
-			var maxWorkerNum = 8
+			var maxWorkerNum = 3
 					
 			var nextWorkerNum = 0
 
