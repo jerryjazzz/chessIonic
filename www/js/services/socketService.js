@@ -1,10 +1,13 @@
-services.factory('socketService', function($rootScope, $timeout) {
+services.factory('socketService', function($rootScope, $timeout, $q) {
 //console.log($websocket)
   var socket = new function () {
 
 
 
     var socket = this;
+    
+    socket.waitingPromiseResolvers = [];
+
 
     if ("WebSocket" in window) {
       console.log('Websockets found in window.')
@@ -18,6 +21,13 @@ services.factory('socketService', function($rootScope, $timeout) {
           var data = JSON.parse(evt.data);
           if(data.command === "reHello"){
             console.log('The server answered our HELLO.');
+            
+            // resolve waiting promises here
+            var i = socket.waitingPromiseResolvers.length;
+            while (i--) {
+              var resolve = socket.waitingPromiseResolvers.pop();
+              resolve ({isDevice: true});
+            };
           }
 
           //wsOnmessageFunc(evt, $rootScope, $scope, ws, indexGlobals)
@@ -47,6 +57,53 @@ services.factory('socketService', function($rootScope, $timeout) {
           }
 
         };
+        
+        socket.whenReady = function (command) {
+          
+          
+          
+          return $q(function (resolve, reject) {
+
+            if(command === 'Hello') return resolve();
+
+            switch(socket.ws.readyState){
+              
+              case 1:
+                return resolve();
+               
+              case 0:
+                waitingPromiseResolvers.push(resolve);
+                break;
+                
+              default:
+                return reject('WS is closing or closed')
+                //could wait here if trying to reconnect / no net
+            }
+
+          })
+        };
+              
+        socket.send = function (command, data, message, cb) {
+
+          var sendThis = {
+
+            command: command,
+            data: data,
+            message: message,
+            
+          }
+
+          if (!cb) {
+            var cb = function () {}
+          }
+          socket.whenReady(sendThis.command).then(function(){
+            socket.ws.send(JSON.stringify(sendThis))//, cb);
+          }, function(err){
+            //cant send message, socket is closed
+            throw err;
+          })
+
+        }
 
         socket.ws.onopen = function (openEvent) {
           // Web Socket is connected, send data using send()
@@ -58,27 +115,6 @@ services.factory('socketService', function($rootScope, $timeout) {
           socket.socketOn = true
           $rootScope.isConnected = true;
           $rootScope.$apply();
-
-
-          //var sender = this;
-
-          socket.send = function (command, data, message, cb) {
-
-            var sendThis = {
-
-              command: command,
-              data: data,
-              message: message,
-              //socketID: socketID
-            }
-
-            if (!cb) {
-              var cb = function () {}
-            }
-
-            socket.ws.send(JSON.stringify(sendThis))//, cb);
-
-          }
 
           console.log("Socket connection initialised, let's say HELLO...")
 
@@ -128,13 +164,16 @@ services.factory('socketService', function($rootScope, $timeout) {
     },
 
     goOnline: function () {
-
       socket.connect();
-
     },
+    
     goOffline: function () {
       socket.disconnect();
     },
+    
+    send: function (command, data, message, cb) {
+      return socket.send(command, data, message, cb);
+    }
 
   };
 });

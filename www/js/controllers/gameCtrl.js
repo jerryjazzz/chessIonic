@@ -1,4 +1,4 @@
-controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $interval) {
+controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $interval, socketService) {
   
 
   $scope.scrw = window.screen.availWidth
@@ -36,30 +36,45 @@ controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $inter
         
 				//console.log('after adding pastState:', game.allPastTables.length)
 
-				game._id = $scope.game._id
-				// game.desiredDepth = 3//$rootScope.depth
+				game._id = $scope.game._id	//TODO: remove this bugfix, moveintable should keep _id
+			
+				if ($rootScope.settingsTab.publishGame) {	
+					console.log('in publishgame')
+					
+					
+					
+					if ($rootScope.settingsTab.useOnlineGrid) {			// && AI is on
+						console.log('in useOnlineGrid')
+						game.desiredDepth = $rootScope.settingsTab.desiredDepth;
+						
+						game.command = 'makeAiMove'
+						game.moveTask = new MoveTaskN(dbTable)
+						
+					}
+					
+					socketService.send('moved', game, 'moved', function() {
+						//here the game might not have an _id yet, server will register it first and send updateGamId command
+						$scope.game = game;	//update view
 
-				// if (game.wName == 'Computer' || game.bName == 'Computer') {
+					})
+					
+				} else {
+					// not publishing game, offline AI or no ai
+					$scope.game = game;	//update view
+					
+					$timeout(function(){	//let update finish
+						if(!noAiMove){
+							
+							$scope.makeAiMove();	
+							
+						}
+					})
+					
+				}
+				
+					
 
-				// 	game.command = 'makeAiMove'
-				// 	game.moveTask = new MoveTaskN(game)
-
-				// }
-
-			//	socketSend('moved', game, 'moved', function() {
-
-					// $scope.game.table = game.table
-					// $scope.game.wNext = game.wNext
-					// $scope.game.moves = game.moves
-          $scope.game=game
-			//	})
-      $timeout(function(){
-        if(!noAiMove){
-          $scope.makeAiMove();
-          //$scope.showTable()
-          //$scope.$apply()
-        }
-      })
+        
       
       
       
@@ -67,8 +82,6 @@ controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $inter
 
 $scope.makeAiMove = function () {
 	
-	// if($scope.multiThread){
-	// 	if($scope.fastMultiThread){
 			thinker.fastMultiThreadAi($scope.game, $rootScope.settingsTab.desiredDepth, function(move){
 				
 				$rootScope.stats['Last AI move stats'].items = move.result;
@@ -77,25 +90,7 @@ $scope.makeAiMove = function () {
 				$scope.$apply();
 					
 			});
-	// 	}else{
-	// 		thinker.multiThreadAi($scope.game, $scope.desiredDepth, function(move){
-				
-	// 			$scope.game = moveInTable(move.moveStr, $scope.game, false)
-	// 			$scope.showTable()
-	// 			$scope.$apply();
-					
-	// 		});
-	// 	}
-	// }else{
-	// 	thinker.singleThreadAi($scope.game, $scope.desiredDepth, function(move){
-			
-	// 		$scope.game = moveInTable(move.moveStr, $scope.game, false)
-	// 		$scope.showTable()
-	// 		$scope.$apply();
-				
-	// 	});
-		
-	// }
+
 }
 	
 //scope=$scope

@@ -31,13 +31,12 @@ services.factory('deviceService', function($cordovaDevice, $q) {
 
       console.log('Device read:', device);
 
-      waitingPromiseResolvers.forEach(function (resolve) {
-        console.log('resolving promise waiting for deviceready event...')
-        resolve({isDevice: true});
-
-      })
-
-
+      var i = waitingPromiseResolvers.length;
+      while (i--) {
+        var resolve = waitingPromiseResolvers.pop();
+        resolve ({isDevice: true});
+      };
+    
     }, false);
 
   }
@@ -45,11 +44,13 @@ services.factory('deviceService', function($cordovaDevice, $q) {
   var isReady = function () {
     return $q(function (resolve, reject) {
 
-      waitingPromiseResolvers.push(resolve);
+     
 
       if(!device.isDevice) return resolve({isDevice: false});
       if(device.isDevice && device.isReady) return resolve({isDevice: true});
       if(!device.eventListenerStarted) return reject('eventListener did not start');
+
+       waitingPromiseResolvers.push(resolve);
 
     })
   };

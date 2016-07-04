@@ -815,6 +815,10 @@ var onMessageFuncs = {
     
 	moved: function(connection, onTable) {
 
+		//var insertWillPublishIt = false
+		//TODO: Error handling, WTF!!!!
+		
+		var sendBackTheId = false
 		
 		onTable.moved = new Date()
 			.getTime()
@@ -827,10 +831,24 @@ var onMessageFuncs = {
                 _id:onTable._id
             },function(dat){
                 
+				if(!dat){
+					
+					//table received, not in the db, 
+					//this is new game we need to store 
+					
+					//and return the id to client
+					delete onTable._id
+					dat	= onTable;
+					
+					sendBackTheId = true				
+					
+				} else {
+					var tempID=dat._id
+					dat=onTable
+					dat._id=tempID
+				}
                 
-                var tempID=dat._id
-                dat=onTable
-                dat._id=tempID
+				
                 
                 // db.collection("tables").save(dat, function(err3, res) {
 				// 	//table moved and saved, let's check what to do
@@ -847,12 +865,23 @@ var onMessageFuncs = {
                 
                 
             },function(savedDoc){
-                
-                clients.publishView('board.html', onTable._id, 'dbTable.table', onTable.table)
+				
+                if(sendBackTheId){
+					// some game just got published, need to send back the new id to client
+					
+					
+				}
+            
+				
+				clients.publishView('board.html', onTable._id, 'dbTable.table', onTable.table)
 
                 clients.publishView('board.html', onTable._id, 'dbTable.wNext', onTable.wNext)
 
-                switch (command) {
+                
+				
+				
+				
+				switch (command) {
 
                     case 'makeAiMove':
 
@@ -861,7 +890,8 @@ var onMessageFuncs = {
                     break;
 
                 }
-            
+				
+				
                 
             })
         
