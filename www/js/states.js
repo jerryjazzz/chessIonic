@@ -14,7 +14,7 @@ appModule.config(function($stateProvider, $urlRouterProvider) {
   })
 
   // Each tab has its own nav history stack:
-  
+
   .state('tab.game', {
     url: '/game',
     views: {
@@ -25,22 +25,22 @@ appModule.config(function($stateProvider, $urlRouterProvider) {
     }
   })
 
-  .state('tab.dash', {
-    url: '/dash',
+  .state('tab.stats', {
+    url: '/stats',
     views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
+      'tab-stats': {
+        templateUrl: 'templates/stats/tab-stats.html',
+        controller: 'statsCtrl'
       }
     }
   })
 
-  .state('tab.chats', {
-      url: '/chats',
+  .state('tab.lobby', {
+      url: '/lobby',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
+        'tab-lobby': {
+          templateUrl: 'templates/lobby/tab-lobby.html',
+          controller: 'lobbyCtrl'
         }
       }
     })
