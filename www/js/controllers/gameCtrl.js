@@ -48,14 +48,29 @@ controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $inter
 						game.desiredDepth = $rootScope.settingsTab.desiredDepth;
 						
 						game.command = 'makeAiMove'
-						game.moveTask = new MoveTaskN(dbTable)
+						game.moveTask = new MoveTaskN(game)
 						
 					}
 					
 					socketService.send('moved', game, 'moved', function() {
 						//here the game might not have an _id yet, server will register it first and send updateGamId command
 						$scope.game = game;	//update view
-
+						
+						if(!$rootScope.settingsTab.useOnlineGrid){
+							
+							$scope.game = game;	//update view
+							
+							$timeout(function(){	//let update finish
+								if(!noAiMove){
+									
+									$scope.makeAiMove();	
+									
+								}
+							})
+									
+							
+						}
+						
 					})
 					
 				} else {
@@ -88,6 +103,10 @@ $scope.makeAiMove = function () {
 				$scope.game = moveInTable(move.moveStr, $scope.game, false)
 				$scope.showTable()
 				$scope.$apply();
+				
+				if($rootScope.settingsTab.publishGame){
+					//publish offline AIs move here
+				}
 					
 			});
 
