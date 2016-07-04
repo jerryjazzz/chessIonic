@@ -41,6 +41,18 @@ controllers.controller('appCtrl', function ($scope, $rootScope, $interval, $cord
     }
 
   };
+  
+  $rootScope.stats = {};
+  var groupNames = ['Last AI move stats', 'more crap']
+  
+  groupNames.forEach(function(name, index){
+
+    $rootScope.stats[name] = {
+      name: name,
+      items: []
+    };
+
+  })
 
   $rootScope.showLoading = function (text) {
     $ionicLoading.show({

@@ -1,9 +1,29 @@
-<ion-view view-title="Settings">
+<ion-view view-title="Game stats">
   <ion-content>
     <ion-list>
-      <div ng-repeat="group in groups">
+      <div ng-repeat="group in stats">
         <ion-item class="item-stable" ng-click="toggleGroup(group)" ng-class="{active: isGroupShown(group)}"> <i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i> &nbsp; {{group.name}} </ion-item>
-        <ion-item class="item-accordion" ng-repeat="item in group.items" ng-show="isGroupShown(group)"> {{item}} </ion-item>
+          
+          <!--<ion-item class="item-accordion stats-header" ng-show="">-->
+              <!--header--> 
+            <div ng-if="group.name === 'Last AI move stats' && isGroupShown(group) && group.items.length" class="row stats-header">
+              <div class="col-20">Move</div>
+              <div class="col-20">Score</div>
+              <div class="col-60">Forecast</div>
+            </div>
+          
+          <!--</ion-item>-->
+          
+          <ion-item class="item-accordion" ng-repeat="item in group.items" ng-show="isGroupShown(group)"> 
+            <!--list-->
+            <div ng-if="group.name === 'Last AI move stats'" class="row">
+              <div class="col-20">{{item.moveTree.slice(0, 4)}}</div>
+              <div class="col-20">{{item.score}}</div>
+              <div class="col-60">{{item.moveTree}}</div>
+            </div> 
+          
+          </ion-item>
+        </ion-item>
       </div>
     </ion-list>
   </ion-content>

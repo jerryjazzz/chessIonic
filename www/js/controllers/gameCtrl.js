@@ -71,6 +71,7 @@ $scope.makeAiMove = function () {
 	// 	if($scope.fastMultiThread){
 			thinker.fastMultiThreadAi($scope.game, $rootScope.settingsTab.desiredDepth, function(move){
 				
+				$rootScope.stats['Last AI move stats'].items = move.result;
 				$scope.game = moveInTable(move.moveStr, $scope.game, false)
 				$scope.showTable()
 				$scope.$apply();
