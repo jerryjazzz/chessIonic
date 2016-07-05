@@ -814,7 +814,7 @@ var onMessageFuncs = {
     
     
 	moved: function(connection, onTable) {
-
+		clients.send(connection,'a',1)
 		//TODO: Error handling, WTF!!!!
 		
 		var sendBackTheId = false
