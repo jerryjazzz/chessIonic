@@ -84,7 +84,7 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
         };
               
         socket.send = function (command, data, message, cb) {
-
+console.log(cb)
           var sendThis = {
 
             command: command,
@@ -97,7 +97,8 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
             var cb = function () {}
           }
           socket.whenReady(sendThis.command).then(function(){
-            socket.ws.send(JSON.stringify(sendThis))//, cb);
+            socket.ws.send(JSON.stringify(sendThis), function(){ console.log('nem fut le'); cb(); });
+            cb();
           }, function(err){
             //cant send message, socket is closed
             throw err;

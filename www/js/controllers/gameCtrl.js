@@ -53,6 +53,8 @@ controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $inter
 					}
 					
 					socketService.send('moved', game, 'moved', function() {
+						
+						console.log('lefut')
 						//here the game might not have an _id yet, server will register it first and send updateGamId command
 						$scope.game = game;	//update view
 						
