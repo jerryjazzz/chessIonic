@@ -28,8 +28,8 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
         };
 
         // Let us open a web socket
-        //socket.ws = new WebSocket('ws://miki.ddns.net:3000/sockets/');
-        socket.ws = new WebSocket('ws://localhost:4000/sockets/');
+        socket.ws = new WebSocket('ws://miki.ddns.net:3000/sockets/');
+        //socket.ws = new WebSocket('ws://localhost:4000/sockets/');
 
         socket.ws.onmessage = function (evt) {
           var data = JSON.parse(evt.data);

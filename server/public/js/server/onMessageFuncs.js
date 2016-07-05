@@ -835,11 +835,19 @@ var onMessageFuncs = {
 					//table received, not in the db, 
 					//this is new game we need to store 
 					
+					//TODO: should publish new game in lobby here
+					
 					//and return the id to client
 					delete onTable._id
 					dat	= onTable;
+					// // 
+					// sendBackTheId = true			
 					
-					sendBackTheId = true				
+					dbFuncs.insert('tables', onTable, function(savedDoc){
+						
+						clients.send(connection, 'saveYourGameId', savedDoc._id)
+						
+					});	
 					
 				} else {
 					var tempID=dat._id
@@ -864,13 +872,13 @@ var onMessageFuncs = {
                 
                 
             },function(savedDoc){
-				clients.send(connection, 'log', 'In savedDoc')
-                if(sendBackTheId){
-					// some game just got published, need to send back the new id to client
-					//clients.send(connection,'a',1)
+				
+                // if(sendBackTheId){
+				// 	// some game just got published, need to send back the new id to client
+				// 	//clients.send(connection,'a',1)
 					
 					
-				}
+				// }
             
 				
 				clients.publishView('board.html', onTable._id, 'dbTable.table', onTable.table)
