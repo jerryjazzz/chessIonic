@@ -11,6 +11,7 @@ controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $inter
   
 	$scope.game = new Game(Math.random() ,'Unknown player', 'Computer');//id, wname, bname
   $scope.game.displayedTable= angular.copy($scope.game.table);
+	$rootScope.activeGame = $scope.game;		//TODO: make game handler a service
 
   var store = {
     oopsStates:[]
@@ -44,7 +45,7 @@ controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $inter
 
 				game._id = $scope.game._id	//TODO: remove this bugfix, moveintable should keep _id
 			
-				if ($rootScope.settingsTab.publishGame) {	
+				if ($rootScope.settingsTab.publishGame && socketService.isOnline() ) {	
 					console.log('in publishgame')
 					
 					

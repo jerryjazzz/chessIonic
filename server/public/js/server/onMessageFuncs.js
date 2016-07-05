@@ -827,7 +827,7 @@ var onMessageFuncs = {
 		onTable.command = ''
 		
 		dbFuncs.update("tables",{
-                _id: dbFuncs.ObjectID( onTable._id )
+                _id: typeof ontable._id === 'string' ? dbFuncs.ObjectID( onTable._id ) : onTable._id
             },function(dat){
                 
 				if(!dat){

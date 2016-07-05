@@ -85,7 +85,8 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
           return $q(function (resolve, reject) {
 
             if(command === 'Hello') return resolve();
-
+            if(!socket.ws) return reject(['Would send, but no available socket.', command])
+            
             switch(socket.ws.readyState){
               
               case 1:
