@@ -825,9 +825,9 @@ var onMessageFuncs = {
 		var command = onTable.command
 
 		onTable.command = ''
-        
+		
 		dbFuncs.update("tables",{
-                _id:onTable._id
+                _id: dbFuncs.ObjectID( onTable._id )
             },function(dat){
                 
 				if(!dat){

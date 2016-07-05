@@ -1,13 +1,15 @@
 controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $interval, socketService) {
   
 	socketService.addOnmessageFunc('saveYourGameId', function(data){
-		alert(data);
-		console.log(data);
+		
+		console.log('Game published.', data);
+		$scope.game._id = data.newId;
+		
 	})
 
   $scope.scrw = window.screen.availWidth
   
-	$scope.game = new Game(1,2,3);//id, wname, bname
+	$scope.game = new Game(Math.random() ,'Unknown player', 'Computer');//id, wname, bname
   $scope.game.displayedTable= angular.copy($scope.game.table);
 
   var store = {
