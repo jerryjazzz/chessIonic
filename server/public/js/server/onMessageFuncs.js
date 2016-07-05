@@ -815,7 +815,6 @@ var onMessageFuncs = {
     
 	moved: function(connection, onTable) {
 
-		//var insertWillPublishIt = false
 		//TODO: Error handling, WTF!!!!
 		
 		var sendBackTheId = false
@@ -868,7 +867,7 @@ var onMessageFuncs = {
 				
                 if(sendBackTheId){
 					// some game just got published, need to send back the new id to client
-					
+					connection.send({a:1})
 					
 				}
             
@@ -897,102 +896,5 @@ var onMessageFuncs = {
         
 
 	},
-	//var 
-	// myPartIsDone: function(connection, data) {
-
-	// 	connection = clients.fromStore(connection)
-
-	// 	connection.addedData.speed = connection.addedData.speed * 100
-
-	// 	var index = getTaskIndex(data[0]._id)
-
-	// 	data.forEach(function(move) {
-
-	// 		splitTaskQ[index].returnedMoves.push(move)
-	// 		splitTaskQ[index].pendingSolvedMoves--
-
-	// 	})
-
-	// 	splitMoves.markSplitMoveDone(data[0]._id, data[0].thinker)
-
-	// 	if (splitTaskQ[index].pendingSolvedMoves == 0) {
-
-	// 		////////////////////////////////////////////////////////////all moves solved, check best and make a move
-
-			
-    //         splitMoves.remove(splitTaskQ[index]._id)
-            
-    //         splitTaskQ[index].returnedMoves.sort(
-	// 			moveSorter
-	// 		)
-
-	// 		moveInTable(splitTaskQ[index].returnedMoves[0].move, splitTaskQ[index])
-
-	// 		splitTaskQ[index].chat = [~~((new Date() - splitTaskQ[index].splitMoveStarted) / 10) / 100 + 'sec'] //1st line in chat is timeItTook
-
-	// 		splitTaskQ[index].returnedMoves.forEach(function(returnedMove) {
-	// 			splitTaskQ[index].chat = splitTaskQ[index].chat.concat({
-	// 				//move: returnedMove.moveStr,
-	// 				score: returnedMove.score,
-	// 				hex: returnedMove.score.toString(16),
-	// 				moves: returnedMove.moveTree
-
-	// 			})
-
-	// 		})
-
-	// 		splitTaskQ[index].pendingMoveCount = undefined
-
-	// 		splitTaskQ[index].returnedMoves = undefined
-
-	// 		splitTaskQ[index].command = undefined
-
-	// 		splitTaskQ[index].aiType = undefined
-
-	// 		splitTaskQ[index].splitMoveStarted = undefined
-
-	// 		splitTaskQ[index].oppKingPos = undefined
-
-	// 		splitTaskQ[index].origProtect = undefined
-
-	// 		splitTaskQ[index].origData = undefined
-
-	// 		splitTaskQ[index].origDeepDatatt = undefined
-
-	// 		splitTaskQ[index].origDeepDatatf = undefined
-
-	// 		splitTaskQ[index].origDeepDataft = undefined
-
-	// 		splitTaskQ[index].origDeepDataff = undefined
-
-	// 		splitTaskQ[index].aiTable = undefined
-	// 		splitTaskQ[index].pendingSolvedMoves = undefined
-
-	// 		mongodb.connect(cn, function(err, db) {
-	// 			db.collection("tables")
-	// 				.save(splitTaskQ[index], function(err3, res) {
-
-	// 					////console.log('publishing-------------------------------->>> ',splitTaskQ[index]._id)
-	// 					//clients.publishView('board.html',splitTaskQ[index]._id,'dbTable.table',splitTaskQ[index].table)
-
-	// 					clients.publishView('board.html', splitTaskQ[index]._id, 'dbTable.table', splitTaskQ[index].table)
-
-	// 					clients.publishView('board.html', splitTaskQ[index]._id, 'dbTable.wNext', splitTaskQ[index].wNext)
-
-	// 					clients.publishView('board.html', splitTaskQ[index]._id, 'dbTable.chat', splitTaskQ[index].chat)
-
-	// 					clients.publishView('board.html', splitTaskQ[index]._id, 'dbTable.moves', splitTaskQ[index].moves)
-
-	// 					//popThem(splitTaskQ[index]._id, splitTaskQ[index], 'splitMove', 'splitMove')
-
-	// 					db.close()
-
-	// 					splitTaskQ.splice(index, 1)
-
-	// 				})
-	// 		})
-	// 	}
-
-	// }
 
 }

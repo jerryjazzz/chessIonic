@@ -2,25 +2,20 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
 //console.log($websocket)
   var socket = new function () {
 
-
-
     var socket = this;
     
-    socket.waitingPromiseResolvers = [];
-
-
     if ("WebSocket" in window) {
-      console.log('Websockets found in window.')
+      console.log('Websockets found in window.');
+      
+      socket.waitingPromiseResolvers = [];
+      
+      
 
       socket.connect = function(){
-
-        // Let us open a web socket
-        socket.ws = new WebSocket('ws://miki.ddns.net:3000/sockets/');//,["WebSocket"]);
-
-        socket.ws.onmessage = function (evt) {
-          var data = JSON.parse(evt.data);
-          if(data.command === "reHello"){
-            console.log('The server answered our HELLO.');
+        
+        var checkIfReHello = function(receivedData){
+          if(receivedData.command === "reHello"){
+            console.log('The server answered our HELLO.'); 
             
             // resolve waiting promises here
             var i = socket.waitingPromiseResolvers.length;
@@ -28,9 +23,20 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
               var resolve = socket.waitingPromiseResolvers.pop();
               resolve ({isDevice: true});
             };
+            
           }
+        };
 
-          //wsOnmessageFunc(evt, $rootScope, $scope, ws, indexGlobals)
+        // Let us open a web socket
+        //socket.ws = new WebSocket('ws://miki.ddns.net:3000/sockets/');
+        socket.ws = new WebSocket('ws://localhost:4000/sockets/');
+
+        socket.ws.onmessage = function (evt) {
+          var data = JSON.parse(evt.data);
+          checkIfReHello(data);
+          
+          //wsOnmessageFunc(evt, $rootScope, $scope, ws, indexGlobals)  //from old server
+        
         }
 
         socket.ws.onerror = function (err){
@@ -59,9 +65,7 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
         };
         
         socket.whenReady = function (command) {
-          
-          
-          
+                   
           return $q(function (resolve, reject) {
 
             if(command === 'Hello') return resolve();
@@ -84,7 +88,7 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
         };
               
         socket.send = function (command, data, message, cb) {
-console.log(cb)
+          
           var sendThis = {
 
             command: command,
@@ -97,8 +101,11 @@ console.log(cb)
             var cb = function () {}
           }
           socket.whenReady(sendThis.command).then(function(){
-            socket.ws.send(JSON.stringify(sendThis), function(){ console.log('nem fut le'); cb(); });
+            
+            //TODO: implement try/catch error handling for the below
+            socket.ws.send(JSON.stringify(sendThis))//, function(){ console.log('nem fut le'); cb(); });  //callback throws error in cordova
             cb();
+            
           }, function(err){
             //cant send message, socket is closed
             throw err;
@@ -108,7 +115,7 @@ console.log(cb)
 
         socket.ws.onopen = function (openEvent) {
           // Web Socket is connected, send data using send()
-          //this.send({a:1})
+          
           console.log('WebSocket connected.')
 
           socket.openedSocket = openEvent.target;
@@ -119,9 +126,6 @@ console.log(cb)
 
           console.log("Socket connection initialised, let's say HELLO...")
 
-          //console.log(socket.ws)
-         // socket.ws.send = socket.ws.__proto__.sendconsole.log(err)
-
           socket.send('Hello', {
              //isIonicClient: $rootScope.device.ismobile,
              device: $rootScope.device,
@@ -130,10 +134,6 @@ console.log(cb)
             }, 'Hello', function () {})
 
         };
-
-
-
-
 
       };
 
