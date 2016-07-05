@@ -867,7 +867,7 @@ var onMessageFuncs = {
 				
                 if(sendBackTheId){
 					// some game just got published, need to send back the new id to client
-					//connection.send({a:1})
+					connection.send({a:1})
 					
 				}
             
