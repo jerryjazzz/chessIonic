@@ -8,8 +8,23 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
       console.log('Websockets found in window.');
       
       socket.waitingPromiseResolvers = [];
+      socket.onmessageFuncs = [];
       
+      socket.addOnmessageFunc = function(funcName, func){
+        if (!(funcName in socket.onmessageFuncs)) socket.onmessageFuncs[funcName] = func; 
+      };
       
+      socket.doOnmessageFunc = function(funcName, data){
+        try{
+          socket.onmessageFuncs[funcName] (data);
+        } catch(err) {
+          throw new Error('onmessageFunc ' + funcName + ' not found.');
+        }
+      };
+      
+      socket.handleMessage = function (data) {
+        socket.doOnmessageFunc(data.command, data.data);
+      };
 
       socket.connect = function(){
         
@@ -35,6 +50,7 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
           var data = JSON.parse(evt.data);
           checkIfReHello(data);
           
+          socket.handleMessage(data); //this has command, data message
           //wsOnmessageFunc(evt, $rootScope, $scope, ws, indexGlobals)  //from old server
         
         }
@@ -174,6 +190,10 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
     
     send: function (command, data, message, cb) {
       return socket.send(command, data, message, cb);
+    },
+    
+    addOnmessageFunc: function (funcName, func){
+      return socket.addOnmessageFunc (funcName, func);
     }
 
   };

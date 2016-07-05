@@ -838,14 +838,18 @@ var onMessageFuncs = {
 					//TODO: should publish new game in lobby here
 					
 					//and return the id to client
-					delete onTable._id
+					var oldId = onTable._id;
+					delete onTable._id;
 					dat	= onTable;
 					// // 
 					// sendBackTheId = true			
 					
 					dbFuncs.insert('tables', onTable, function(savedDoc){
 						
-						clients.send(connection, 'saveYourGameId', savedDoc._id)
+						clients.send(connection, 'saveYourGameId', {
+							newId: savedDoc._id,
+							oldId: oldId
+						})
 						
 					});	
 					

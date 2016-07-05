@@ -1,5 +1,9 @@
 controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $interval, socketService) {
   
+	socketService.addOnmessageFunc('saveYourGameId', function(data){
+		alert(data);
+		console.log(data);
+	})
 
   $scope.scrw = window.screen.availWidth
   
