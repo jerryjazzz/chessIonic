@@ -864,10 +864,10 @@ var onMessageFuncs = {
                 
                 
             },function(savedDoc){
-				
+				clients.send(connection, 'log', 'In savedDoc')
                 if(sendBackTheId){
 					// some game just got published, need to send back the new id to client
-					clients.send(connection,'a',1)
+					//clients.send(connection,'a',1)
 					
 					
 				}
