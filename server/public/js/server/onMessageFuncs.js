@@ -814,7 +814,7 @@ var onMessageFuncs = {
     
     
 	moved: function(connection, onTable) {
-		clients.send(connection,'a',1)
+		
 		//TODO: Error handling, WTF!!!!
 		
 		var sendBackTheId = false
@@ -831,7 +831,7 @@ var onMessageFuncs = {
             },function(dat){
                 
 				if(!dat){
-					
+					clients.send(connection,'log','Game not found in DB.')
 					//table received, not in the db, 
 					//this is new game we need to store 
 					
