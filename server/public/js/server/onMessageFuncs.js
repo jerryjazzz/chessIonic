@@ -826,6 +826,25 @@ var onMessageFuncs = {
 
 		onTable.command = ''
 		
+		var publishAndLookForAi = function(game){
+			
+			clients.publishView('board.html', game._id, 'dbTable.table', game.table)
+
+			clients.publishView('board.html', game._id, 'dbTable.wNext', game.wNext)
+			
+			switch (command) {
+
+				case 'makeAiMove':
+				
+					clients.send(connection,'log','Starting to calculate move on the grid.')
+
+					splitMoves.makeAiMove(game)
+
+				break;
+
+			}
+		}
+		
 		dbFuncs.update("tables",{
                 _id: typeof onTable._id === 'string' ? dbFuncs.ObjectID( onTable._id ) : onTable._id
             },function(dat){
@@ -846,10 +865,12 @@ var onMessageFuncs = {
 					
 					dbFuncs.insert('tables', onTable, function(savedDoc){
 						
-						clients.send(connection, 'saveYourGameId', {
+						clients.send(connectioonTabgamelen, 'saveYourGameId', {
 							newId: savedDoc._id,
 							oldId: oldId
 						})
+						
+						publishAndLookForAi(savedDoc);
 						
 					});	
 					
@@ -885,25 +906,7 @@ var onMessageFuncs = {
 				// }
             
 				
-				clients.publishView('board.html', onTable._id, 'dbTable.table', onTable.table)
-
-                clients.publishView('board.html', onTable._id, 'dbTable.wNext', onTable.wNext)
-
-                
-				
-				
-				
-				switch (command) {
-
-                    case 'makeAiMove':
-					
-						clients.send(connection,'log','Starting to calculate move on the grid.')
-
-                        splitMoves.makeAiMove(onTable)
-
-                    break;
-
-                }
+				publishAndLookForAi(onTable)
 				
 				
                 
