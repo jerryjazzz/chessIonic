@@ -4,17 +4,44 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
 
     var socket = this;
     
+    var checkIfReHello = function(receivedData){
+      if(receivedData.command === "reHello"){
+        
+      }
+    };
+    
+    
+    
     if ("WebSocket" in window) {
       console.log('Websockets found in window.');
       
       socket.waitingPromiseResolvers = [];
-      socket.onmessageFuncs = [];
+      socket.onmessageFuncs = {
+        
+        reHello: function(data){
+          console.log('The server answered our HELLO.'); 
+          
+          // resolve waiting promises here
+          var i = socket.waitingPromiseResolvers.length;
+          while (i--) {
+            var resolve = socket.waitingPromiseResolvers.pop();
+            resolve ({isDevice: true});
+          };
+          
+        },
+        
+        log: function(data){
+          console.log('SERVER: ', data);
+        },
+        
+      };
       
       socket.addOnmessageFunc = function(funcName, func){
         if (!(funcName in socket.onmessageFuncs)) socket.onmessageFuncs[funcName] = func; 
       };
       
       socket.doOnmessageFunc = function(funcName, data){
+        checkIfReHello(data);
         try{
           socket.onmessageFuncs[funcName] (data);
         } catch(err) {
@@ -28,19 +55,7 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
 
       socket.connect = function(){
         
-        var checkIfReHello = function(receivedData){
-          if(receivedData.command === "reHello"){
-            console.log('The server answered our HELLO.'); 
-            
-            // resolve waiting promises here
-            var i = socket.waitingPromiseResolvers.length;
-            while (i--) {
-              var resolve = socket.waitingPromiseResolvers.pop();
-              resolve ({isDevice: true});
-            };
-            
-          }
-        };
+        
 
         // Let us open a web socket
         socket.ws = new WebSocket('ws://miki.ddns.net:3000/sockets/');
@@ -48,7 +63,7 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
 
         socket.ws.onmessage = function (evt) {
           var data = JSON.parse(evt.data);
-          checkIfReHello(data);
+          // checkIfReHello(data);
           
           socket.handleMessage(data); //this has command, data message
           //wsOnmessageFunc(evt, $rootScope, $scope, ws, indexGlobals)  //from old server

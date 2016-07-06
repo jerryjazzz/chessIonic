@@ -896,6 +896,8 @@ var onMessageFuncs = {
 				switch (command) {
 
                     case 'makeAiMove':
+					
+						clients.send(connection,'log','Starting to calculate move on the grid.')
 
                         splitMoves.makeAiMove(onTable)
 
