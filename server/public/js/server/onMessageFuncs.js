@@ -865,7 +865,7 @@ var onMessageFuncs = {
 					
 					dbFuncs.insert('tables', onTable, function(savedDoc){
 						
-						clients.send(connectioonTabgamelen, 'saveYourGameId', {
+						clients.send(connection, 'saveYourGameId', {
 							newId: savedDoc._id,
 							oldId: oldId
 						})
