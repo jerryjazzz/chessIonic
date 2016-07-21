@@ -851,17 +851,12 @@ var onMessageFuncs = {
                 
 				if(!dat){
 					clients.send(connection,'log','Game not found in DB.')
-					//table received, not in the db, 
-					//this is new game we need to store 
-					
+					//table received, not in the db, need to store 
 					//TODO: should publish new game in lobby here
 					
-					//and return the id to client
 					var oldId = onTable._id;
 					delete onTable._id;
 					dat	= onTable;
-					// // 
-					// sendBackTheId = true			
 					
 					dbFuncs.insert('tables', onTable, function(savedDoc){
 						
@@ -879,40 +874,8 @@ var onMessageFuncs = {
 					dat=onTable
 					dat._id=tempID
 				}
-                
-				
-                
-                // db.collection("tables").save(dat, function(err3, res) {
-				// 	//table moved and saved, let's check what to do
-				// 	db.close()
-                    
-                //     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',err3)
-                
-
-					
-
-				// })
-                
-                
-                
-                
             },function(savedDoc){
-				
-                // if(sendBackTheId){
-				// 	// some game just got published, need to send back the new id to client
-				// 	//clients.send(connection,'a',1)
-					
-					
-				// }
-            
-				
 				publishAndLookForAi(onTable)
-				
-				
-                
             })
-        
-
 	},
-
 }

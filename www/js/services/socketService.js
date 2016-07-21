@@ -6,14 +6,6 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
 
     var socket = this;
     
-    var checkIfReHello = function(receivedData){
-      if(receivedData.command === "reHello"){
-        
-      }
-    };
-    
-    
-    
     if ("WebSocket" in window) {
       console.log('Websockets found in window.');
       
@@ -31,6 +23,11 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
           };
           
         },
+
+        refreshBrowser: function(data){
+          console.log('SERVER: Forced refresh'); 
+          window.location.reload()
+        },
         
         log: function(data){
           console.log('SERVER: ', data);
@@ -43,7 +40,6 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
       };
       
       socket.doOnmessageFunc = function(funcName, data){
-        checkIfReHello(data);
         try{
           socket.onmessageFuncs[funcName] (data);
         } catch(err) {
