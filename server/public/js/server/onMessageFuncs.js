@@ -841,7 +841,7 @@ var onMessageFuncs = {
 					try{
 						splitMoves.makeAiMove(game)
 					} catch (e){
-						clients.send(client, 'error', {message: e.message, stack: e.stack})
+						clients.send(connection, 'error', {message: e.message, stack: e.stack})
 					}
 
 				break;
