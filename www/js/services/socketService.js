@@ -25,8 +25,12 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
         },
 
         refreshBrowser: function(data){
-          console.log('SERVER: Forced refresh'); 
+          console.log('SERVER: refreshBrowser'); 
           window.location.reload()
+        },
+
+        speedTest: (data) => {
+          console.log('SERVER: speedTest');
         },
         
         log: function(data){
