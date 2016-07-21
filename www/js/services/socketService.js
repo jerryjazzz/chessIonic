@@ -41,7 +41,7 @@ services.factory('socketService', function($rootScope, $timeout, $q, speedTestSe
         },
 
         error: function(data){
-          console.log('SERVER ERROR: ', data.message, data.stack);
+          console.log('SERVER ERROR: ', data.message, data.stack, data);
         },
         
       };
