@@ -838,7 +838,11 @@ var onMessageFuncs = {
 				
 					clients.send(connection,'log','Starting to calculate move on the grid.')
 
-					splitMoves.makeAiMove(game)
+					try{
+						splitMoves.makeAiMove(game)
+					} catch (e){
+						clients.send(client, 'error', {message: e.message, stack: e.stack})
+					}
 
 				break;
 
