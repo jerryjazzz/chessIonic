@@ -5,7 +5,7 @@
 			
 			var addCallback = function (callback, xData) {
 				
-				var callbackId = Math.random() * Math.random();	//TODO: replace this
+				var callbackId = Math.random() * Math.random();	//TODO: replace this//
 				callbacks[callbackId] = {
 					callback: callback,
 					xData: xData	
