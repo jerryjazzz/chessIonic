@@ -651,8 +651,6 @@ var SplitMoves = function(clients,dbFuncs,Engine,mongo) {
 		
 		clients.publishAddedData()
 
-		throw new Error('ez itt')
-
 	}
 
 	var getSplitMoveIndexToAssist = function(ignoreGameNum) {
