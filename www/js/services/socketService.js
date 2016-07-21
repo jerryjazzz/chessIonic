@@ -1,4 +1,4 @@
-services.factory('socketService', function($rootScope, $timeout, $q) {
+services.factory('socketService', function($rootScope, $timeout, $q, speedTestService) {
 
   var serverAddress = 'ws://miki.ddns.net:3000/sockets/'
   
@@ -31,6 +31,9 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
 
         speedTest: (data) => {
           console.log('SERVER: speedTest');
+          speedTestService.quickTest().then((result) => {
+            socket.send('speedTestResult', result)
+          })
         },
         
         log: function(data){
@@ -47,7 +50,7 @@ services.factory('socketService', function($rootScope, $timeout, $q) {
         try{
           socket.onmessageFuncs[funcName] (data);
         } catch(err) {
-          throw new Error('onmessageFunc ' + funcName + ' not found.');
+          throw new Error(err);
         }
       };
       

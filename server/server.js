@@ -136,8 +136,13 @@ wsServer.on('request', function(request) {
 		if (message.type === 'utf8') {
 			
 			var received = JSON.parse( message.utf8Data )
-            
-			onMessageFuncs[received.command](connection,received.data,newConnectionID)
+
+			try{
+				onMessageFuncs[received.command](connection,received.data,newConnectionID)
+			} catch(e) {
+				clients.send(connection,'log',e)
+			}    
+			
 		}
 	});
 	
