@@ -140,7 +140,7 @@ wsServer.on('request', function(request) {
 			try{
 				onMessageFuncs[received.command](connection,received.data,newConnectionID)
 			} catch(e) {
-				clients.send(connection,'error',{message: e.message + 'received.command: ' + received.command, stack: e.stack})
+				clients.send(connection,'error',{message: e.message + 'received: ' + JSON.stringify(received), stack: e.stack})
 			}    
 			
 		}
