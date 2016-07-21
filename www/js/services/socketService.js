@@ -1,12 +1,7 @@
 services.factory('socketService', function($rootScope, $timeout, $q) {
 
-  // var serverAddress = 'ws://miki.ddns.net:3000/sockets/'
-  var serverAddress = 'ws://localhost:4000/sockets/';
-  // if(process.env.SERVERADDRESS){
-  //   alert('Socket connecting to server from ENV:', process.env.SERVERADDRESS)
-  //   serverAddress = process.env.SERVERADDRESS
-  // }
-
+  var serverAddress = 'ws://miki.ddns.net:3000/sockets/'
+  
   var socket = new function () {
 
     var socket = this;

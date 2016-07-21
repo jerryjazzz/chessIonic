@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "chessIonic: An Ionic project",
   "scripts": {
-    "start": "(cd server && node server.js) & SERVERADDRESS=http://localhost:4000  ionic serve"
+    "server": "(cd server && node server.js)",
+    "client": "ionic serve"
   },
   "dependencies": {
     "angular-websocket": "^2.0.0",
