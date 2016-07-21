@@ -70,7 +70,4 @@ controllers.controller('appCtrl', function ($scope, $rootScope, $interval, $cord
     $rootScope.settingsTab.setGoOnline(true); //connect on startup
   })
 
-
-
-
 })
