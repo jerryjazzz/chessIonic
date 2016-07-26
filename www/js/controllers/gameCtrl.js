@@ -15,6 +15,8 @@ controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $inter
 					$scope.$apply()
 				}
 
+			} else {
+				console.log('something unhandled')
 			}
 		})
 

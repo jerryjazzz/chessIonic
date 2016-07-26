@@ -859,7 +859,7 @@ var onMessageFuncs = {
 					//TODO: should publish new game in lobby here
 					
 					var oldId = onTable._id;
-					delete onTable._id;
+					// delete onTable._id;
 					dat	= onTable;
 					
 					dbFuncs.insert('tables', onTable, function(savedDoc){
