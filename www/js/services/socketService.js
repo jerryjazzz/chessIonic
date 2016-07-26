@@ -1,6 +1,6 @@
 services.factory('socketService', function($rootScope, $timeout, $q, speedTestService) {
 
-  var serverAddress = 'ws://miki.ddns.net:3000/sockets/'
+  var serverAddress = 'ws://miki.ddns.net:4000/sockets/'
   
   var socket = new function () {
 
@@ -54,7 +54,7 @@ services.factory('socketService', function($rootScope, $timeout, $q, speedTestSe
         try{
           socket.onmessageFuncs[funcName] (data);
         } catch(err) {
-          throw new Error(err);
+          throw err;
         }
       };
       

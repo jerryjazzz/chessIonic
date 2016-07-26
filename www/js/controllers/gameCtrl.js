@@ -1,9 +1,43 @@
 controllers.controller('gameCtrl', function($scope, $rootScope, $timeout, $interval, socketService) {
   
-	socketService.addOnmessageFunc('saveYourGameId', function(data){
+	socketService.addOnmessageFunc('saveYourGameId', function(data1){
 		
-		console.log('Game published.', data);
-		$scope.game._id = data.newId;
+		console.log('Game published.', data1);
+		$scope.game._id = data1.newId;
+
+		// add handler
+		socketService.addOnmessageFunc('updateView', (data) => {
+			if(data.subViewName == data1.newId){
+			console.log(data)
+				if(data.viewPart.substring(0,8) === 'dbTable.') {
+					$scope.game[data.viewPart.substring(8)] = data.data
+					$scope.showTable()
+					$scope.$apply()
+				}
+
+			}
+		})
+
+		// subscribe
+		socketService.send('showView', {
+
+			oldViewName: '',//$rootScope.loginVals.viewName,
+			oldSubViewName: '',//$rootScope.subViewName,
+			oldViewParts: [],//$rootScope.activeViewParts.slice(),
+
+			newViewName: 'board.html',
+			newSubViewName: data1.newId,
+			newViewParts: [
+				'dbTable.table',
+				'dbTable.chat',
+				'dbTable.moves',
+				'busyThinkers',
+				'dbTable.wNext',
+				'wPlayer',
+				'dbTable.allPastTables'
+			]
+
+		})
 		
 	})
 
