@@ -14,7 +14,7 @@ var dbFuncs = require('./public/js/server/dbFuncs.js')
 
 const cn = process.env.MYMONGO_PORT_27017_TCP_ADDR
 	? 'mongodb://' + process.env.MYMONGO_PORT_27017_TCP_ADDR  + ':' + process.env.MYMONGO_PORT_27017_TCP_PORT + '/chessdb'
-	: 'mongodb://localhost:27017/chessdb'
+	: 'mongodb://0.0.0.0:27017/chessdb'
 
 dbFuncs.connect(cn)
 
