@@ -11,7 +11,10 @@ var WebSocketServer = require('websocket').server;
 
 
 var dbFuncs = require('./public/js/server/dbFuncs.js')
-dbFuncs.connect('mongodb://localhost:27017/chessdb')
+
+const cn = 'mongodb://' + process.env.MYMONGO_PORT_27017_TCP_ADDR  + ':' + MYMONGO_PORT_27017_TCP_PORT + '/chessdb'
+dbFuncs.connect(cn)
+// dbFuncs.connect('mongodb://localhost:27017/chessdb')
 
 var SplitMoves = require('./public/js/server/splitMoves.js')
 var Engine=require('./public/js/all/engine.js')
