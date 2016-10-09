@@ -12,7 +12,7 @@ var WebSocketServer = require('websocket').server;
 
 var dbFuncs = require('./public/js/server/dbFuncs.js')
 
-const cn = 'mongodb://' + process.env.MYMONGO_PORT_27017_TCP_ADDR  + ':' + MYMONGO_PORT_27017_TCP_PORT + '/chessdb'
+const cn = 'mongodb://' + process.env.MYMONGO_PORT_27017_TCP_ADDR  + ':' + process.env.MYMONGO_PORT_27017_TCP_PORT + '/chessdb'
 dbFuncs.connect(cn)
 // dbFuncs.connect('mongodb://localhost:27017/chessdb')
 
