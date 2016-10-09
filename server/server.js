@@ -25,7 +25,7 @@ app.use(cors())
 
 var httpServ = http.createServer(app)
 
-var server = httpServ.listen(4000, function() {
+var server = httpServ.listen(8080, function() {
 	var host = server.address()
 		.address;
 	var port = server.address()
@@ -172,7 +172,8 @@ app.use(bodyParser.urlencoded({
 	extended: true
 }));
 
-app.use(express.static('public'))
+// app.use(express.static('public'))
+app.use(express.static('../www'))
 app.use(morgan("combined"))
 
 

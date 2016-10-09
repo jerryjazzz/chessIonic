@@ -1,19 +1,25 @@
 {
   "name": "chessionic",
   "version": "0.0.1",
-  "description": "chessIonic: An Ionic project",
+  "description": "chessIonic: An Ionic chess project",
   "scripts": {
     "server": "(cd server && node server.js)",
-    "client": "ionic serve"
+    "client": "ionic serve",
+    "start": "npm run server"
   },
   "dependencies": {
     "angular-websocket": "^2.0.0",
-    "gulp": "^3.5.6",
+    "body-parser": "^1.15.2",
+    "cors": "^2.8.1",
+    "gulp": "^3.9.1",
     "gulp-concat": "^2.2.0",
     "gulp-minify-css": "^0.3.0",
     "gulp-rename": "^1.2.0",
     "gulp-sass": "^2.0.4",
-    "socketio": "^1.0.0"
+    "mongodb": "^2.2.10",
+    "morgan": "^1.7.0",
+    "socketio": "^1.0.0",
+    "websocket": "^1.0.23"
   },
   "devDependencies": {
     "bower": "^1.3.3",
