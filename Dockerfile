@@ -10,4 +10,4 @@ COPY . /src
 EXPOSE  8080
 
 # RUN cd /src; npm start
-CMD ["cd /src && npm", "start"]
+CMD cd /src; npm start
