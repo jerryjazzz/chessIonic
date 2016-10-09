@@ -1,4 +1,4 @@
-FROM alpine:3.1
+FROM node:argon
 
 # Update
 RUN apk add --update nodejs
