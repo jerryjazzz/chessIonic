@@ -72,7 +72,11 @@ services.factory('socketService', function($rootScope, $timeout, $q, speedTestSe
       socket.connect = function(){
         
         $timeout(() => {
-          console.log('5 sec, socketOn:', socket.socketOn)
+          if (!socket.socketOn) {
+            console.log('5 sec passed, no socketOn, trying alt...')
+            toggleServerAddress()
+            socket.connect()
+          }
         }, 5000)
 
         // Let us open a web socket
