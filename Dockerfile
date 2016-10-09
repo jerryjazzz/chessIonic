@@ -11,5 +11,5 @@ RUN cd /src; npm install
 COPY . /src
 
 EXPOSE  8080
-RUN cd ./src/server
-CMD ["node", "server.js"]
+
+CMD ["node", "/src/server/server.js"]
