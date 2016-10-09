@@ -44,6 +44,7 @@ controllers.controller('appCtrl', function ($scope, $rootScope, $interval, $cord
 
   $rootScope.saveClientMongoId = data => {
     console.log('Saving clientMongoId:', data)
+    $rootScope.clientMongoId = data
   }
   
   $rootScope.stats = {};
