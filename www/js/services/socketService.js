@@ -1,8 +1,9 @@
 services.factory('socketService', function($rootScope, $timeout, $q, speedTestService) {
 
   var serverAddress = 'ws://miki.ddns.net/sockets/'
-  var altServerAddress = 'ws://127.0.0.1:8080/sockets/'
-  // var altServerAddress = 'ws://192.168.1.90/sockets/'
+  // var altServerAddress = 'ws://127.0.0.1:8080/sockets/'
+  var altServerAddress = 'ws://192.168.1.90/sockets/'
+
 
   var toggleServerAddress = () => {
     var tempAddress = serverAddress
@@ -54,6 +55,7 @@ services.factory('socketService', function($rootScope, $timeout, $q, speedTestSe
 
         saveYourClientMongoId: function(data){
           console.log('clientMongoId received: ', data);
+          $rootScope.saveClientMongoId(data)
         },
         
       };

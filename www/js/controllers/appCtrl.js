@@ -41,6 +41,10 @@ controllers.controller('appCtrl', function ($scope, $rootScope, $interval, $cord
     }
 
   };
+
+  $rootScope.saveClientMongoId = data => {
+    console.log('Saving clientMongoId:', data)
+  }
   
   $rootScope.stats = {};
   var groupNames = ['Last AI move stats', 'more crap']
