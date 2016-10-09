@@ -38,37 +38,6 @@ var server = httpServ.listen(8080, function() {
 	console.log('app listening at http://%s:%s', host, port);
 });
 
-
-
-
-//Function for starting socket.io
-// function startSocket(serv) {
-//     console.log("Starting socket");
-
-//     //params for socket.io
-//     var options = {
-//         transports: ['websocket'],
-//         allowUpgrades: false,
-//         upgrade: false,
-//         cookie: false
-//     };
-
-//     //start socket.io
-//    var io = require('socket.io')(serv, options);
-
-//     io.on('connection', function (socket) {
-//         //Whan have user send 'test' message for him
-//         socket.emit('test', 'It Works!');
-//     });
-		
-// 		return io
-// }
-//var io = startSocket(httpServ);
-
-// io.on('connection', function(socket){
-//   socket.emit('an event', { some: 'data' });
-// });
-
 var wsServer = new WebSocketServer({
     
 	httpServer: httpServ,

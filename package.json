@@ -5,7 +5,8 @@
   "scripts": {
     "server": "(cd server && node server.js)",
     "client": "ionic serve",
-    "start": "npm run server"
+    "start": "npm run server",
+    "watch": "(cd server && nodemon server.js)"
   },
   "dependencies": {
     "angular-websocket": "^2.0.0",
