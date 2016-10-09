@@ -15,7 +15,10 @@ var initRouter=function(router,app){
     app.use('/api', router);
 
 
-    
+    router.route('/env').get((req, res) => {
+        console.log('ENV REQUEST, sending:', process.env)
+        res.json(process.env)
+    })
 
     router.route('/mod/type').get(function(req,res){
         
