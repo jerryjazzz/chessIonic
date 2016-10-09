@@ -1,7 +1,8 @@
 services.factory('socketService', function($rootScope, $timeout, $q, speedTestService) {
 
   var serverAddress = 'ws://miki.ddns.net/sockets/'
-  var altServerAddress = 'ws://192.168.1.90/sockets/'
+  var altServerAddress = 'ws://127.0.0.1:8080/sockets/'
+  // var altServerAddress = 'ws://192.168.1.90/sockets/'
 
   var toggleServerAddress = () => {
     var tempAddress = serverAddress
@@ -50,6 +51,10 @@ services.factory('socketService', function($rootScope, $timeout, $q, speedTestSe
         error: function(data){
           console.log('SERVER ERROR: ', data.message, data.stack, data);
         },
+
+        saveYourClientMongoId: function(data){
+          console.log('clientMongoId received: ', data);
+        },
         
       };
       
@@ -58,10 +63,10 @@ services.factory('socketService', function($rootScope, $timeout, $q, speedTestSe
       };
       
       socket.doOnmessageFunc = function(funcName, data){
-        try{
+        if (socket.onmessageFuncs[funcName]) {
           socket.onmessageFuncs[funcName] (data);
-        } catch(err) {
-          throw err;
+        } else {
+          throw new Error('unknown command from server: ' + funcName);
         }
       };
       

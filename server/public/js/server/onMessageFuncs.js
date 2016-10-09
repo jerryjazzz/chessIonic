@@ -548,7 +548,7 @@ var onMessageFuncs = {
 
 		clients.storeVal(connection, 'cookieIdRnd', data.cookieIdRnd)
 
-		if (data.clientMongoId == '') {
+		if (!data.clientMongoId) {
 
 			registerNewClient(data, connection) //this will put it in db and ask client to return with new mongoID
 
