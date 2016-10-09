@@ -1,7 +1,14 @@
 services.factory('socketService', function($rootScope, $timeout, $q, speedTestService) {
 
-  var serverAddress = 'ws://miki.ddns.net:4000/sockets/'
-  
+  var serverAddress = 'ws://miki.ddns.net/sockets/'
+  var altServerAddress = 'ws://192.168.1.90/sockets/'
+
+  var toggleServerAddress = () => {
+    var tempAddress = serverAddress
+    serverAddress = altServerAddress
+    altServerAddress = tempAddress
+  }
+
   var socket = new function () {
 
     var socket = this;
@@ -64,7 +71,9 @@ services.factory('socketService', function($rootScope, $timeout, $q, speedTestSe
 
       socket.connect = function(){
         
-        
+        $timeout(() => {
+          console.log('5 sec, socketOn:', socket.socketOn)
+        }, 5000)
 
         // Let us open a web socket
         socket.ws = new WebSocket(serverAddress);
