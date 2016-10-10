@@ -1,9 +1,10 @@
 services.factory('socketService', function($rootScope, $timeout, $q, speedTestService) {
-
+  // console.log(document.location)
   var serverAddresses = [
     'ws://miki.ddns.net/sockets/',
     'ws://192.168.1.90/sockets/',
-    'ws://0.0.0.0:8080/sockets/'
+    // 'ws://0.0.0.0:8080/sockets/',
+    'ws://' + document.location.host + '/sockets/'
   ]
 
   var serverAddress = serverAddresses[0]
