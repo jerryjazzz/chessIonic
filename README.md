@@ -1,12 +1,17 @@
 studio# chessIonic
 chess in ionic framework
 
-## to host:
-- git clone ...
-- cd chessIonic
-- npm i
-- npm start
+## requirements
+- node v6.3.1
+- mongodb on localhost:27017
 
+## to host:
+```sh
+git clone https://github.com/mikilukasik/chessIonic.git &&
+cd chessIonic &&
+npm i &&
+npm start
+```
 ## to compile (to Android on Ubuntu)
 tutorial at https://ccoenraets.github.io/ionic-tutorial/
 
@@ -17,7 +22,7 @@ sudo apt-get update &&
 sudo apt-get install ia32-libs
 ```
 
-- git clone
+- git clone https://github.com/mikilukasik/chessIonic.git
 - cd chessIonic
 - npm i -g cordova ionic
 - install java:
@@ -28,19 +33,23 @@ sudo apt-get install oracle-java8-installer &&
 sudo apt-get install oracle-java8-set-default
 ```
 - install android SDK (link is for 64bit Ubuntu v16)
+  link from https://developer.android.com/studio/index.html#downloads
 ```sh
-sudo wget "https://dl.google.com/dl/android/studio/ide-zips/2.2.1.0/android-studio-ide-145.3330264-linux.zip" -P "/opt" && sudo unzip /opt/android-studio-ide-145.3330264-linux.zip -d /opt
+wget "https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz" -P ~/builder &&
+tar -xvzf ~/builder/android-sdk_r24.4.1-linux.tgz -C ~/builder
 ```
 - install ANT
+  link from https://ant.apache.org/bindownload.cgi
 ```sh
-sudo wget "http://apache.mirror.anlx.net//ant/binaries/apache-ant-1.9.7-bin.zip" -P "/opt" &&
-sudo unzip /opt/apache-ant-1.9.7-bin.zip -d /opt
+wget "http://apache.mirror.anlx.net//ant/binaries/apache-ant-1.9.7-bin.zip" -P ~/builder &&
+unzip ~/builder/apache-ant-1.9.7-bin.zip -d ~/builder
+
 ```
 - configure path
 add the below to .bashrc
 ```sh
-export DEV_HOME="/opt"
+export DEV_HOME="~/builder"
 export ANT_HOME="$DEV_HOME/apache-ant-1.9.7"
-export ANDROID_HOME="$DEV_HOME/adt-bundle-linux-x86_64-20131030/sdk"
-export PATH="$PATH:$ANT_HOME/bin:$JAVA_HOME/bin:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools"
+export ANDROID_HOME="$DEV_HOME/android-sdk-linux"
+export PATH="$PATH:$ANT_HOME/bin:$JAVA_HOME/bin:$ANDROID_HOME/tools"
 ```
