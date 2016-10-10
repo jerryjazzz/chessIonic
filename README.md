@@ -11,7 +11,8 @@ chess in ionic framework
 tutorial at https://ccoenraets.github.io/ionic-tutorial/
 
 - for 64 bit machines (only) install ia32-libs:
-```sudo dpkg --add-architecture i386 && 
+```sh
+sudo dpkg --add-architecture i386 && 
 sudo apt-get update &&
 sudo apt-get install ia32-libs
 ```
@@ -20,7 +21,8 @@ sudo apt-get install ia32-libs
 - cd chessIonic
 - npm i -g cordova ionic
 - install java:
-```sudo add-apt-repository ppa:webupd8team/java &&
+```sh
+sudo add-apt-repository ppa:webupd8team/java &&
 sudo apt-get update &&
 sudo apt-get install oracle-java8-installer &&
 sudo apt-get install oracle-java8-set-default
