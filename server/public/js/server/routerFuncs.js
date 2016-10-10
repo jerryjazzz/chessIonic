@@ -165,6 +165,21 @@ var initRouter=function(router,app){
         
     
     })
+
+
+    router.route('/db/collection/:name').get(function(req,res){
+        
+        
+            dbFuncs.query(req.params.name, {}, function(collInfos){
+                
+            
+            
+            res.json(collInfos)
+            
+        })
+        
+    
+    })
     
     
     router.route('/mod/stats/:modType').get(function(req,res){

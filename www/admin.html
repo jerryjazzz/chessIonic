@@ -99,10 +99,7 @@
   </style>
 
   <script>
-    // var serverAddress = 'http://192.168.1.90';
-    var serverAddress = 'http://0.0.0.0:8080';
-    // var serverAddress = 'http://miki.ddns.net:5000'; //dev mode
-
+   
     var appModule = angular.module("appModule", []);
     appModule.controller("appCtrl", ApplicationController);
 
@@ -111,7 +108,7 @@
         login: function(user) {
           return $http({
             method: 'POST',
-            url: serverAddress + '/api/adminLogin',
+            url: $rootScope.serverAddress + '/api/adminLogin',
 
             headers: {
               'Content-Type': 'application/json',
@@ -123,7 +120,7 @@
         register: function(user) {
           return $http({
             method: 'POST',
-            url: serverAddress + '/api/adminRegister',
+            url: $rootScope.serverAddress + '/api/adminRegister',
 
             headers: {
               'Content-Type': 'application/json',
@@ -136,7 +133,7 @@
         getCollections: function() {
           return $http({
             method: 'GET',
-            url: serverAddress + '/api/db/collections',
+            url: $rootScope.serverAddress + '/api/db/collections',
             headers: {
               'Content-Type': 'application/json',
               authToken: $rootScope.authToken
@@ -146,7 +143,7 @@
         dbQuery: function(query) {
           return $http({
             method: 'POST',
-            url: serverAddress + '/api/db/query',
+            url: $rootScope.serverAddress + '/api/db/query',
 
             headers: {
               'Content-Type': 'application/json',
@@ -162,7 +159,7 @@
         submitDocumentChanges: function(collection, record) {
           return $http({
             method: 'POST',
-            url: serverAddress + '/api/submitDocumentChanges',
+            url: $rootScope.serverAddress + '/api/submitDocumentChanges',
 
             headers: {
               'Content-Type': 'application/json',
@@ -178,7 +175,7 @@
         deleteDocument: function(collection, record) {
           return $http({
             method: 'POST',
-            url: serverAddress + '/api/deleteDocument',
+            url: $rootScope.serverAddress + '/api/deleteDocument',
 
             headers: {
               'Content-Type': 'application/json',
@@ -194,7 +191,7 @@
         multiDeleteDocuments: function(collection, ids) {
           return $http({
             method: 'POST',
-            url: serverAddress + '/api/multiDeleteDocuments',
+            url: $rootScope.serverAddress + '/api/multiDeleteDocuments',
 
             headers: {
               'Content-Type': 'application/json',
@@ -252,6 +249,18 @@
       // $interval(function(){
       //   $scope.isLoggedIn = !$scope.isLoggedIn
       // },5000)
+
+      $scope.setServerAddress = addr => {
+        console.log(addr)
+        $rootScope.serverAddress = addr
+        apiService.getCollections().then(colls => {
+          $scope.collections = colls
+          $scope.query.collection = colls[0]
+        }, console.log)
+      }
+
+      $rootScope.serverAddresses = ['http://miki.ddns.net', 'http://192.168.1.90', 'http://0.0.0.0:8080']
+      $scope.setServerAddress($rootScope.serverAddresses[0])
 
       $rootScope.elasticResizers = [];
 
@@ -343,11 +352,6 @@
       $scope.editingLineDataTypes = {};
 
       $scope.dataTypes = ['string', 'number', 'object', 'boolean', 'undefined'];
-
-      apiService.getCollections().then(colls => {
-        $scope.collections = colls
-        $scope.query.collection = colls[0]
-      }, console.log)
 
       $scope.adminFunctions = ['Query', 'Register new admin'];
 
@@ -595,10 +599,16 @@
   <div id="app_edit_all" class="ui-layout-north lui">
 
   <div style="display: table; height: 100%; width: 100%">
-      <div ng-show="isLoggedIn" style="display: table-cell; vertical-align: middle; background: silver; border-right: 5px solid white; width:1px">
+      <div ng-show="true" style="display: table-cell; vertical-align: middle; background: silver; border-right: 5px solid white; width:1px">
         <select ng-options="item as item for item in adminFunctions" ng-init="currentFunction='Query'" ng-model="currentFunction">
           
         </select>
+
+        <select ng-options="item as item for item in serverAddresses" ng-model="serverAddress" ng-change="setServerAddress(serverAddress)">
+          
+        </select>
+
+
       </div>
 
       <div style="display: table-cell; vertical-align: middle; background: silver">
