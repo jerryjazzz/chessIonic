@@ -1,11 +1,11 @@
- 
+var log = []
+var logger = (...args) => log.push(...args)
+
 var express = require('express');
 var morgan = require('morgan');
 var bodyParser = require("body-parser");
 var fs = require('fs');
-
 var cors = require('cors');
-
 var http = require('http')
 var WebSocketServer = require('websocket').server;
 
@@ -16,7 +16,9 @@ const cn = process.env.MYMONGO_PORT_27017_TCP_ADDR
 	? 'mongodb://' + process.env.MYMONGO_PORT_27017_TCP_ADDR  + ':' + process.env.MYMONGO_PORT_27017_TCP_PORT + '/chessdb'
 	: 'mongodb://0.0.0.0:27017/chessdb'
 
+logger('cn', cn)
 dbFuncs.connect(cn)
+logger('after connect')
 
 var SplitMoves = require('./public/js/server/splitMoves.js')
 var Engine=require('./public/js/all/engine.js')

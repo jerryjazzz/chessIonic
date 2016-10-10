@@ -20,6 +20,12 @@ var initRouter=function(router,app){
         res.json(process.env)
     })
 
+    router.route('/log').get((req, res) => {
+        var toSend = log || {error: 'no log present'}
+        console.log('LOG REQUEST, sending:', toSend)
+        res.json(toSend)
+    })
+
     router.route('/mod/type').get(function(req,res){
         
         var sendMod=clients.getMod(req.query.id)
