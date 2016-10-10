@@ -260,6 +260,7 @@
       }
 
       $rootScope.serverAddresses = ['http://miki.ddns.net', 'http://192.168.1.90', 'http://0.0.0.0:8080']
+      if (document.location) $rootScope.serverAddresses.unshift(document.location.origin)
       $scope.setServerAddress($rootScope.serverAddresses[0])
 
       $rootScope.elasticResizers = [];
