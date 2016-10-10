@@ -1,14 +1,15 @@
 services.factory('socketService', function($rootScope, $timeout, $q, speedTestService) {
 
-  var serverAddress = 'ws://miki.ddns.net/sockets/'
-  // var altServerAddress = 'ws://127.0.0.1:8080/sockets/'
-  var altServerAddress = 'ws://192.168.1.90/sockets/'
+  var serverAddresses = [
+    'ws://miki.ddns.net/sockets/',
+    'ws://192.168.1.90/sockets/',
+    'ws://0.0.0.0:8080/sockets/'
+  ]
 
-
+  var serverAddress = serverAddresses[0]
   var toggleServerAddress = () => {
-    var tempAddress = serverAddress
-    serverAddress = altServerAddress
-    altServerAddress = tempAddress
+    serverAddresses.push(serverAddresses.shift())
+    serverAddress = serverAddresses[0]
   }
 
   var socket = new function () {
@@ -80,11 +81,13 @@ services.factory('socketService', function($rootScope, $timeout, $q, speedTestSe
         
         $timeout(() => {
           if (!socket.socketOn) {
-            console.log('5 sec passed, no socketOn, trying alt...')
+            console.log('5 sec passed, no socketOn, trying next address..')
             toggleServerAddress()
             socket.connect()
           }
         }, 5000)
+
+        console.log('Connecting socket to ', serverAddress)
 
         // Let us open a web socket
         socket.ws = new WebSocket(serverAddress);
