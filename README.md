@@ -28,3 +28,8 @@ sudo apt-get install oracle-java8-installer &&
 sudo apt-get install oracle-java8-set-default
 ```
 - install android studio
+
+```sh
+wget https://dl.google.com/dl/android/studio/ide-zips/2.2.1.0/android-studio-ide-145.3330264-linux.zip ~/Development &&
+unzip ~/Development/android-studio-ide-145.3330264-linux.zip
+```
