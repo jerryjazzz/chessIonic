@@ -11,4 +11,10 @@ chess in ionic framework
 - git clone
 - cd chessIonic
 - npm i -g cordova ionic
-- sudo apt-get install android-sdk
+- install java:
+  - sudo add-apt-repository ppa:webupd8team/java
+  - sudo apt-get update
+  - sudo apt-get install oracle-java8-installer
+  - sudo apt-get install oracle-java8-set-default
+- install android studio
+  
