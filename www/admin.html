@@ -1,0 +1,756 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+  <title>Votey Admin</title>
+
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+
+
+  <link type="text/css" rel="stylesheet" href="http://layout.jquery-dev.net/lib/css/layout-default-latest.css" />
+
+
+  <script type="text/javascript" src="http://layout.jquery-dev.net/lib/js/jquery-1.4.2.js"></script>
+  <script type="text/javascript" src="http://layout.jquery-dev.net//lib/js/jquery-ui-1.7.2.js"></script>
+  <script type="text/javascript" src="http://layout.jquery-dev.net//lib/js/jquery.layout-1.2.0.js"></script>
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+
+  <style>
+    /*.alertcourtain {
+      position: absolute;
+      height: 20vw;
+      top: 10vw;
+      right: 20vw;
+      left: 20vw;
+      margin-right: auto;
+      margin-left: auto;
+      margin-bottom: auto;
+      margin-top: auto;
+      z-index: 2;
+      min-height: 200px;
+      vertical-align: middle;
+      background-color: rgba(55, 55, 155, 0.8);
+      color: white
+    }*/
+    /*.northheight {
+      height: 250px;
+    }
+
+    .fullheight {
+      height: 100px;
+    }*/
+    
+    .bordered {
+      border: 1px solid gray;
+      border-collapse: true
+    }
+    
+    .highlighted {
+      background: silver
+    }
+    
+    .tablehead {
+      background: gray
+    }
+    
+    #query {
+      text-align: center;
+      padding: 10px;
+      font-family: monospace;
+    }
+    
+    #wrapper {
+      border: 1px solid gray;
+      padding-left: 0.5%;
+      padding-top: 0.4%;
+      padding-bottom: 0.4%;
+    }
+    
+    #div1 {
+      display: inline-block;
+      width: 30%;
+      height: 90%;
+      overflow: scroll;
+      vertical-align: top;
+      text-align: center;
+      border: 1px solid gray;
+      font-family: monospace;
+    }
+    
+    #div2 {
+      display: inline-block;
+      width: 69%;
+      height: 90%;
+      overflow: scroll;
+      border: 1px solid gray;
+      vertical-align: top;
+      font-family: monospace;
+    }
+    
+    .monofont {
+      font-family: monospace;
+    }
+    
+    table {
+      border-collapse: collapse;
+    }
+  </style>
+
+  <script>
+    // var serverAddress = 'http://192.168.1.90';
+    var serverAddress = 'http://0.0.0.0:8080';
+    // var serverAddress = 'http://miki.ddns.net:5000'; //dev mode
+
+    var appModule = angular.module("appModule", []);
+    appModule.controller("appCtrl", ApplicationController);
+
+    appModule.service('apiService', function($http, $rootScope) {
+      return {
+        login: function(user) {
+          return $http({
+            method: 'POST',
+            url: serverAddress + '/api/adminLogin',
+
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            data: user
+          });
+
+        },
+        register: function(user) {
+          return $http({
+            method: 'POST',
+            url: serverAddress + '/api/adminRegister',
+
+            headers: {
+              'Content-Type': 'application/json',
+              authToken: $rootScope.authToken
+            },
+            data: user
+          });
+
+        },
+        getCollections: function() {
+          return $http({
+            method: 'GET',
+            url: serverAddress + '/api/db/collections',
+            headers: {
+              'Content-Type': 'application/json',
+              authToken: $rootScope.authToken
+            }
+          }).then(res => res.data.map(c => c.name), err => err);
+        },
+        dbQuery: function(query) {
+          return $http({
+            method: 'POST',
+            url: serverAddress + '/api/db/query',
+
+            headers: {
+              'Content-Type': 'application/json',
+              authToken: $rootScope.authToken
+            },
+            data: query
+          }).then(r => {
+            console.log(r)
+            return r
+          });
+
+        },
+        submitDocumentChanges: function(collection, record) {
+          return $http({
+            method: 'POST',
+            url: serverAddress + '/api/submitDocumentChanges',
+
+            headers: {
+              'Content-Type': 'application/json',
+              authToken: $rootScope.authToken
+            },
+            data: {
+              collection: collection,
+              record: record
+            }
+          });
+
+        },
+        deleteDocument: function(collection, record) {
+          return $http({
+            method: 'POST',
+            url: serverAddress + '/api/deleteDocument',
+
+            headers: {
+              'Content-Type': 'application/json',
+              authToken: $rootScope.authToken
+            },
+            data: {
+              collection: collection,
+              record: record
+            }
+          });
+
+        },
+        multiDeleteDocuments: function(collection, ids) {
+          return $http({
+            method: 'POST',
+            url: serverAddress + '/api/multiDeleteDocuments',
+
+            headers: {
+              'Content-Type': 'application/json',
+              authToken: $rootScope.authToken
+            },
+            data: {
+              collection: collection,
+              ids: ids
+            }
+          });
+
+        }
+
+      };
+    });
+
+    appModule.service('errorService', function() {
+      return {
+
+        dealWithError: function(err) {
+          alert('Error: ' + JSON.stringify(err));
+        }
+
+      };
+    });
+
+    appModule.directive('elastic', [
+      '$timeout', '$rootScope',
+      function($timeout, $rootScope) {
+        return {
+          restrict: 'A',
+          link: function($scope, element) {
+
+            $scope.initialHeight = $scope.initialHeight || element[0].style.height;
+            var resize = function() {
+
+              element[0].style.height = $scope.initialHeight;
+              element[0].style.height = "" + element[0].scrollHeight + "px";
+
+            };
+            element.on("input change", resize);
+            $scope.$watch('editingLine', resize, true);
+
+            $timeout($scope.resizeElasticElements, 0);
+
+            $rootScope.elasticResizers.push(resize);
+
+          }
+        };
+      }
+    ]);
+
+    function ApplicationController($scope, $rootScope, apiService, errorService, $timeout, $interval) { //$rootScope, , $timeout, $http, $interval, $compile
+
+      // $interval(function(){
+      //   $scope.isLoggedIn = !$scope.isLoggedIn
+      // },5000)
+
+      $rootScope.elasticResizers = [];
+
+      $scope.login = function(user) {
+
+        return apiService.login(user).then(function(result) {
+          $rootScope.authToken = result.data;
+          $rootScope.isLoggedIn = true;
+          user = {};
+        }, function(err) {
+          if (err.data.message == "Wrong password.") return alert('Wrong password.');
+          errorService.dealWithError(err);
+        });
+
+      };
+
+      $scope.register = function(user) {
+
+        if (user.pwd && user.pwd === user.pwd2) return apiService.register(user).then(function(result) {
+          alert(user.name + ' registered.');
+          user = {};
+        }, errorService.dealWithError);
+
+      };
+
+      $(document).ready(function() {
+
+        // this layout could be created with NO OPTIONS - but showing some here just as a sample...
+        // myLayout = $('body').layout(); -- syntax with No Options
+
+        $scope.myLayout = $('body').layout({
+
+          //    enable showOverflow on west-pane so popups will overlap north pane
+          west__showOverflowOnHover: false
+
+          //    reference only - these options are NOT required because are already the 'default'
+          ,
+          closable: true // pane can open & close
+            ,
+          resizable: true // when open, pane can be resized 
+            ,
+          resizeWhileDragging: true // add from peter
+            ,
+          slidable: false // when closed, pane can 'slide' open over other panes - closes on mouse-out
+
+          //    some resizing/toggling settings
+          //    ,    north__slidable:        false    // OVERRIDE the pane-default of 'slidable=true'
+          ,
+          north__togglerLength_closed: '100%' // toggle-button is full-width of resizer-bar
+            ,
+
+          north__size: 75,
+          //north__spacing_closed: 20 // big resizer-bar when open (zero height)
+          //    ,    south__resizable:        false    // OVERRIDE the pane-default of 'resizable=true'
+          // ,
+          south__spacing_open: 0 // no resizer-bar when open (zero height)
+            ,
+          south__spacing_closed: 20 // big resizer-bar when open (zero height)
+            //    some pane-size settings
+            ,
+          west__minSize: 300,
+          east__size: 300,
+          east__minSize: 200,
+          east__maxSize: Math.floor(screen.availWidth / 2), // 1/2 screen width
+
+          west__onresize: function() {
+
+            $rootScope.elasticResizers.forEach(function(resizer) {
+              resizer();
+            })
+
+          }
+
+        });
+
+      });
+
+      //////end of panes stuff
+
+      setTimeout(function() {
+        $scope.myLayout.close('west');
+      }, 1)
+
+      // $rootScope.on('anyad',function(){
+      //   console.log('blabla')
+      // })
+
+      $scope.editingLine = {};
+      $scope.editingLineDataTypes = {};
+
+      $scope.dataTypes = ['string', 'number', 'object', 'boolean', 'undefined'];
+
+      apiService.getCollections().then(colls => {
+        $scope.collections = colls
+        $scope.query.collection = colls[0]
+      }, console.log)
+
+      $scope.adminFunctions = ['Query', 'Register new admin'];
+
+
+      var arrayOfObjectsToHeadedArray = function(arrOfObjs) {
+        var headedArray = [];
+        var keys = [];
+
+        var indexInKeys = function(key) {
+          var index = keys.indexOf(key);
+          if (index < 0) index = keys.push(key) - 1;
+          return index;
+        };
+
+        arrOfObjs.forEach(function(document, docIndex) {
+          headedArray[docIndex + 1] = [];
+          for (key in document) {
+            var index = indexInKeys(key);
+            headedArray[docIndex + 1][index] = document[key];
+          }
+        });
+
+        headedArray[0] = keys;
+
+        return headedArray;
+
+      };
+
+      var getEditLineIndexFromId = function(id) {
+        for (var index in $scope.queryResult) {
+          if ($scope.queryResult[index]._id == id) return Number(index);
+        }
+        return -1;
+        // body...
+      }
+
+      var getEditingLineDataTypes = function(obj) {
+        var result = {};
+        for (var key in obj) {
+          result[key] = typeof obj[key];
+        };
+        return result;
+      };
+
+      var getEditingLine = function(inObj, types) {
+        var obj = angular.copy(inObj);
+        for (var key in obj) {
+          if (types[key] === 'object') obj[key] = JSON.stringify(obj[key]);
+        };
+        return obj;
+      };
+
+      var parseEditingLine = function(inObj, types) {
+        var obj = angular.copy(inObj);
+        for (var key in obj) {
+          switch (types[key]) {
+            case 'object':
+              obj[key] = JSON.parse(obj[key]);
+              break;
+            case 'number':
+              obj[key] = Number(obj[key]);
+              break;
+            case 'string':
+              obj[key] = obj[key].toString();
+              break;
+            case 'boolean':
+              obj[key] = !!obj[key];
+              break;
+            default:
+          }
+          if (key === "_id" && obj._id === 'New unsaved document') obj._id = undefined;
+        };
+        return obj;
+      };
+
+      var selectedLinesCount = function() {
+        var result = 0;
+        if ($scope.selectedLines)
+          for (var i = 1, len = $scope.selectedLines.length; i < len; i++)
+            if ($scope.selectedLines[i]) result++;
+        return result;
+      };
+
+      $scope.isGroupEdit = () => selectedLinesCount() > 1;
+
+      var doSelectLine = (lineNumber) => {
+        if (lineNumber === 0) {
+          for (var i = 1, len = $scope.selectedLines.length; i < len; i++) $scope.selectedLines[i] = $scope.selectedLines[0];
+          return;
+        }
+        if (selectedLinesCount() === 1 && $scope.selectedLines[lineNumber]) $scope.editLine(lineNumber);
+      };
+
+      $scope.getSelectedArray = () => {
+        var result = [];
+        for (var i = 1, len = $scope.selectedLines.length; i < len; i++)
+          if ($scope.selectedLines[i]) result.push($scope.queryResult[i - 1]);
+        return result;
+      };
+
+      var getKeysFromArrayOfObjects = (arr) => {
+        var keys = [];
+
+        var indexInKeys = function(key) {
+          var index = keys.indexOf(key);
+          if (index < 0) index = keys.push(key) - 1;
+          return index;
+        };
+
+        arr.forEach((editingLine) => {
+          for (key in editingLine) {
+            indexInKeys(key);
+          }
+        })
+
+        return keys;
+      };
+
+      var getKeyValueFromArrayOfObjects = (key, arr) => {
+        var val = arr[0][key];
+        arr.forEach((editingLine) => {
+          if (editingLine[key] !== val && JSON.stringify(val) !== JSON.stringify(editingLine[key])) val = '...'
+        })
+        return val;
+      };
+
+      var prepareGroupEditLine = () => {
+        $scope.groupEditLine = {};
+        var selectedArray = $scope.getSelectedArray();
+        var keys = getKeysFromArrayOfObjects(selectedArray);
+        keys.forEach((key) => {
+          $scope.groupEditLine[key] = getKeyValueFromArrayOfObjects(key, selectedArray);
+        });
+        $scope.groupEditLineDataTypes = getEditingLineDataTypes($scope.groupEditLine); //TODO: not all '...' are strings!
+        $scope.groupEditLine = getEditingLine($scope.groupEditLine, $scope.groupEditLineDataTypes);
+      };
+
+      $scope.selectLine = function(lineNumber) {
+        doSelectLine(lineNumber);
+
+        if ($scope.isGroupEdit()) prepareGroupEditLine()
+      }
+
+      $scope.query = {
+        submit: function(collection, getLastQuery) {
+
+          var query = this;
+          var userQuery = getLastQuery ? $scope.lastQuery : query.input;
+          var userQueryObj = userQuery ? JSON.parse(userQuery) : {};
+          var formData = {
+            query: userQueryObj,
+            collection: collection
+          };
+
+          return apiService.dbQuery(formData).then(function(result) {
+            $scope.selectedLines = []; //new Array(result.data.length + 1)
+
+            for (var i = 0, len = result.data.length + 1; i < len; i++) $scope.selectedLines[i] = false;
+
+            $scope.activeCollection = collection;
+            $scope.lastQuery = query.input;
+
+            console.log('query result', result.data);
+
+            $scope.displayedTable = arrayOfObjectsToHeadedArray(result.data);
+            $scope.queryResult = result.data;
+            query.previous = query.input;
+            query.input = undefined;
+          }, errorService.dealWithError);
+
+        }
+      };
+
+      $scope.editLine = function(lineIndex) {
+        $scope.myLayout.open('west');
+        $scope.editingLineIndex = lineIndex;
+        var editingLine = $scope.queryResult[lineIndex - 1]
+        $scope.editingLineDataTypes = getEditingLineDataTypes(editingLine);
+        $scope.editingLine = getEditingLine(editingLine, $scope.editingLineDataTypes);
+      };
+
+      $scope.submitDocumentChanges = function() {
+        apiService.submitDocumentChanges($scope.activeCollection, parseEditingLine($scope.editingLine, $scope.editingLineDataTypes)).then(function(result) {
+          var savedDocId = result.data._id;
+          console.log(savedDocId)
+
+          $scope.query.submit($scope.activeCollection, true)
+            .then(function() {
+              $scope.editLine(getEditLineIndexFromId(savedDocId) + 1);
+            }, errorService.dealWithError);
+        }, errorService.dealWithError)
+      };
+
+      $scope.newDocumentFromThis = function() {
+        $scope.editingLine._id = 'New unsaved document';
+      };
+
+      $scope.deleteDocument = function() {
+        if (confirm('Are you sure you want to delete this document?')) {
+          apiService.deleteDocument($scope.activeCollection, parseEditingLine($scope.editingLine, $scope.editingLineDataTypes))
+            .then(function(result) {
+              //alert('Document deleted.');
+              return $scope.query.submit($scope.activeCollection, true)
+            }, errorService.dealWithError).then(function() {
+              $scope.editLine(-1);
+              $scope.myLayout.close('west');
+            }, errorService.dealWithError);
+        }
+      };
+
+      var getIdsFromArrayOfObjects = function(arr) {
+        var ids = [];
+        arr.forEach((document) => {
+          ids.push(document._id);
+        });
+        return ids;
+      };
+
+      $scope.deleteSelectedDocuments = () => {
+        var ids = getIdsFromArrayOfObjects($scope.getSelectedArray());
+        if (confirm('Are you sure you want to delete ' + ids.length + ' selected documents?')) {
+          apiService.multiDeleteDocuments($scope.activeCollection, ids)
+            .then(function(result) {
+              //alert('Document deleted.');
+              return $scope.query.submit($scope.activeCollection, true)
+            }, errorService.dealWithError).then(function() {
+              $scope.editLine(-1);
+              $scope.myLayout.close('west');
+            }, errorService.dealWithError);
+        }
+
+      };
+
+    };
+  </script>
+
+
+  <script type="text/javascript">
+  </script>
+
+</head>
+
+<body ng-app="appModule" ng-controller="appCtrl">
+
+  <div id="app_edit_all" class="ui-layout-north lui">
+
+  <div style="display: table; height: 100%; width: 100%">
+      <div ng-show="isLoggedIn" style="display: table-cell; vertical-align: middle; background: silver; border-right: 5px solid white; width:1px">
+        <select ng-options="item as item for item in adminFunctions" ng-init="currentFunction='Query'" ng-model="currentFunction">
+          
+        </select>
+      </div>
+
+      <div style="display: table-cell; vertical-align: middle; background: silver">
+        <div id="query" class="monofont">
+
+          <form ng-submit="login(user)" ng-show="!isLoggedIn">
+
+            <label>Username</label>
+            <input ng-model="user.name"></input>
+
+            <label>Password</label>
+            <input type="password" ng-model="user.pwd"></input>
+
+            <button type="submit">Login</button>
+
+
+          </form>
+
+          <form ng-submit="query.submit(query.collection)" ng-show="isLoggedIn && currentFunction==='Query'">
+            <label>Collection:</label>
+            <select ng-options="item as item for item in collections" ng-model="query.collection" ng-init="query.collection = 'questions'">
+                      </select>
+
+            <label>Query:</label>
+            <input ng-model="query.input"></input>
+
+            <label>Projection (coming soon):</label>
+            <input ng-model="query.projection"></input>
+
+
+            <button type="submit">Submit</button>
+            <br> (strict JSON standard, blank to get whole collection)
+          </form>
+
+          <!-- <form ng-submit="register(regUser)"> -->
+          <form ng-submit="register(regUser)" ng-show="isLoggedIn && currentFunction==='Register new admin'">
+
+            <label>Username</label>
+            <input ng-model="regUser.name"></input>
+
+            <label>Password</label>
+            <input type="password" ng-model="regUser.pwd"></input>
+
+            <label>Re-type password</label>
+            <input type="password" ng-model="regUser.pwd2"></input>
+
+            <button type="submit">Register</button>
+
+          </form>
+
+          
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="app_edit_cmd" class="ui-layout-center lui monofont">
+
+    <table>
+      <tr ng-repeat="(lineNumber, lines) in displayedTable" ng-class="{highlighted: lineNumber === editingLineIndex, tablehead: lineNumber === 0}">
+        <td class="bordered">
+          <input type="checkbox" ng-model="selectedLines[lineNumber]" ng-change="selectLine(lineNumber)"></input>
+        </td>
+        <td ng-repeat="data in lines track by $index" class="bordered" ng-click="editLine(lineNumber)">
+          {{data}}
+        </td>
+      </tr>
+    </table>
+
+
+  </div>
+
+
+  <!--  
+    <div id="app_edit_func" class="ui-layout-east lui">
+east
+    </div>
+ -->
+
+
+  <div id="app_edit_prdy" class="ui-layout-west lui monofont">
+
+
+    <div ng-if="isGroupEdit()">
+      <table>
+        <tr class="tablehead" ng-if="editingLine._id">
+
+          <td colspan="3" style="text-align:center;">
+            <div>Group edit (Coming soon)</div>
+
+          </td>
+
+        </tr>
+        <tr ng-repeat="(key, val) in groupEditLine" ng-if="key !== '_id'">
+          <td>
+            {{key}}
+          </td>
+          <td width="100%">
+            <textarea elastic ng-model="groupEditLine[key]" ng-if="groupEditLineDataTypes[key] !== 'boolean' && groupEditLineDataTypes[key] !== 'number'" style="width: 95%"></textarea>
+            <input ng-model="groupEditLine[key]" ng-if="groupEditLineDataTypes[key] === 'boolean' || groupEditLineDataTypes[key] === 'number'" style="width: 95%">
+          </td>
+          <td width="200px">
+            &nbsp<select ng-options="item as item for item in dataTypes" ng-model="groupEditLineDataTypes[key]">
+                                  </select>
+          </td>
+        </tr>
+      </table>
+      <div ng-if="editingLine._id" style="text-align: center; margin-top: 30px">
+        <!-- <button type="button" ng-click="newDocumentFromThis()">New from this</button> -->
+        <button type="button" ng-click="deleteSelectedDocuments()">Delete selected documents</button>
+        <button type="button" ng-click="">Submit changes(Coming soon)</button>
+      </div>
+    </div>
+
+    <div ng-if="!isGroupEdit()">
+      <table>
+        <tr class="tablehead" ng-if="editingLine._id">
+          <td>
+            _id
+          </td>
+          <td colspan="2">
+            {{editingLine._id}}
+          </td>
+
+        </tr>
+        <tr ng-repeat="(key, val) in editingLine" ng-if="key !== '_id'">
+          <td>
+            {{key}}
+          </td>
+          <td width="100%">
+            <textarea elastic ng-model="editingLine[key]" ng-if="editingLineDataTypes[key] !== 'boolean' && editingLineDataTypes[key] !== 'number'" style="width: 95%"></textarea>
+            <input ng-model="editingLine[key]" ng-if="editingLineDataTypes[key] === 'boolean' || editingLineDataTypes[key] === 'number'" style="width: 95%">
+          </td>
+          <td width="200px">
+            &nbsp<select ng-options="item as item for item in dataTypes" ng-model="editingLineDataTypes[key]">
+                                  </select>
+          </td>
+        </tr>
+      </table>
+      <div ng-if="editingLine._id" style="text-align: center; margin-top: 30px">
+        <button type="button" ng-click="newDocumentFromThis()">New from this</button>
+        <button type="button" ng-click="deleteDocument()">Delete document</button>
+        <button type="button" ng-click="submitDocumentChanges()">Submit changes</button>
+      </div>
+    </div>
+
+    <!-- </pre> -->
+
+  </div>
+
+</body>
+
+</html>

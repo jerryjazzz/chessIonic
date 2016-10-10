@@ -49,6 +49,9 @@ var exportThis = {
 					case 'getCollection':
 						exportThis[thisTask.funcToCall](thisTask.arguments[0], thisTask.arguments[1])
 						break;
+					case 'listCollections':
+						exportThis[thisTask.funcToCall](thisTask.arguments[0])
+						break;
 					case 'query':
 						exportThis[thisTask.funcToCall](thisTask.arguments[0], thisTask.arguments[1], thisTask.arguments[2])
 						break;
@@ -186,6 +189,35 @@ var exportThis = {
 		}
 
 	},
+
+
+	listCollections: function(cb) {
+
+		//mongodb.connect(cn, function(err, dbGlobals.db) {
+		if (dbGlobals.db) {
+
+			dbGlobals.db.listCollections().toArray(function(err, collInfos) {
+
+				cb(collInfos)
+		
+			})
+
+		} else {
+			dbGlobals.pendingStuff.push({
+				started: new Date(),
+				funcToCall: 'listCollections',
+				arguments: [cb]
+			})
+		}
+
+	},
+
+
+
+// 	db.listCollections().toArray(function(err, collInfos) {
+//     // collInfos is an array of collection info objects that look like:
+//     // { name: 'test', options: {} }
+// });
 
 	query: function(collectionName, query, cb) {
 

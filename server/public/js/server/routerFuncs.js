@@ -26,6 +26,10 @@ var initRouter=function(router,app){
         res.json(toSend)
     })
 
+    router.route('/adminLogin').post((req, res) => {
+        res.json({mock:1})
+    })
+
     router.route('/mod/type').get(function(req,res){
         
         var sendMod=clients.getMod(req.query.id)
@@ -123,6 +127,39 @@ var initRouter=function(router,app){
             
             
             res.json(toSend)
+            
+        })
+        
+    
+    })
+    
+    
+        
+    router.route('/db/query').post(function(req,res){
+        
+        
+            // dbFuncs.listCollections(function(collInfos){
+                
+
+            dbFuncs.query(req.body.collection, req.body.query, function(queryResult) {
+         
+            
+            
+            res.json(queryResult)
+            
+        })
+        
+    
+    })
+        
+    router.route('/db/collections').get(function(req,res){
+        
+        
+            dbFuncs.listCollections(function(collInfos){
+                
+            
+            
+            res.json(collInfos)
             
         })
         
