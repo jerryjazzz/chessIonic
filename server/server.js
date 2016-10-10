@@ -12,8 +12,8 @@ var WebSocketServer = require('websocket').server;
 
 var dbFuncs = require('./public/js/server/dbFuncs.js')
 
-const cn = process.env.MYMONGO_PORT_27017_TCP_ADDR
-	? 'mongodb://' + process.env.MYMONGO_PORT_27017_TCP_ADDR  + ':' + process.env.MYMONGO_PORT_27017_TCP_PORT + '/chessdb'
+const cn = process.env.MONGO_PORT_27017_TCP_ADDR
+	? 'mongodb://' + process.env.MONGO_PORT_27017_TCP_ADDR  + ':' + process.env.MONGO_PORT_27017_TCP_PORT + '/chessdb'
 	: 'mongodb://0.0.0.0:27017/chessdb'
 
 logger('cn', cn)
