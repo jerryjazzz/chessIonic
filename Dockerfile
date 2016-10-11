@@ -3,6 +3,8 @@ FROM ubuntu
 # install node and npm
 RUN apt-get update
 RUN apt-get -qq update
+
+RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 RUN apt-get install -y nodejs npm
 
 RUN node -v
