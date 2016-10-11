@@ -5,6 +5,7 @@ RUN apt-get update
 RUN apt-get -qq update
 RUN apt-get install -y nodejs npm
 
+RUN node -v
 # Install app dependencies
 COPY package.json /src/package.json
 RUN cd /src; npm install
