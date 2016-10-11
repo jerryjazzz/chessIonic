@@ -190,17 +190,17 @@ var initRouter=function(router,app){
         function sendDot() {
             if (running) {
                 res.write('.')
-                setTimeout(sendDot, 500);
+                setTimeout(function(){ sendDot() }, 500);
             }
         }
         sendDot()
 
         exec(req.params.command, function (error, stdout, stderr) {
             running = false
-            sys.print('stdout: ' + stdout);
-            sys.print('stderr: ' + stderr);
+            // res.write('stdout: ' + stdout);
+            if (stderr) res.write('stderr: ' + stderr);
             if (error !== null) {
-                console.log('exec error: ' + error);
+                res.write(JSON.stringify({message: error.message, stack: error.stack}));
             }
             res.write(stdout)
             res.end()
