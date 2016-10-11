@@ -9,3 +9,4 @@ server/data
 server/node_modules
 server/nohup.out
 data
+gradle
