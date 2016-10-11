@@ -1,5 +1,5 @@
 var log = []
-var logger = (...args) => log.push(...args)
+var logger = (args) => log.push(args)
 
 var express = require('express');
 var morgan = require('morgan');

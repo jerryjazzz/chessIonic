@@ -1,3 +1,6 @@
+var sys = require('sys')
+var exec = require('child_process').exec;
+
 var initRouter=function(router,app){
         
         
@@ -152,6 +155,34 @@ var initRouter=function(router,app){
     
     })
         
+
+
+        
+    router.route('/buildApp').get(function(req,res){
+        res.writeHead(200, {"Content-Type":"text"});
+        var running = true
+        function sendDot() {
+            if (running) {
+                res.write('.')
+                setTimeout(sendDot, 1000);
+            }
+        }
+        sendDot()
+
+        exec("docker run -it --rm --privileged -v /dev/bus/usb:/dev/bus/usb -v $PWD:/src cordova cordova build", function (error, stdout, stderr) {
+            running = false
+            sys.print('stdout: ' + stdout);
+            sys.print('stderr: ' + stderr);
+            if (error !== null) {
+                console.log('exec error: ' + error);
+            }
+            res.write(stdout)
+            res.end()
+            });
+            
+    })
+        
+
     router.route('/db/query').post(function(req,res){
         
         
