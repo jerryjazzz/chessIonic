@@ -1,8 +1,9 @@
 FROM ubuntu
 
 # install node and npm
-RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-RUN sudo apt-get install -y nodejs
+RUN apt-get update
+RUN apt-get -qq update
+RUN apt-get install -y nodejs npm
 
 # Install app dependencies
 COPY package.json /src/package.json
