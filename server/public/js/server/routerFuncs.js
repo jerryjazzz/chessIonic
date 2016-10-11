@@ -169,7 +169,7 @@ var initRouter=function(router,app){
         }
         sendDot()
 
-        exec("cd .. && docker run -it --rm --privileged -v /dev/bus/usb:/dev/bus/usb -v $PWD:/src cordova cordova build", function (error, stdout, stderr) {
+        exec("cd .. && sudo docker run -it --rm --privileged -v /dev/bus/usb:/dev/bus/usb -v $PWD:/src cordova cordova build", function (error, stdout, stderr) {
             running = false
             sys.print('stdout: ' + stdout);
             sys.print('stderr: ' + stderr);
