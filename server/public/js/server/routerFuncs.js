@@ -183,6 +183,32 @@ var initRouter=function(router,app){
     })
         
 
+
+    router.route('/runCommand/:command').get(function(req,res){
+        res.writeHead(200, {"Content-Type":"text"});
+        var running = true
+        function sendDot() {
+            if (running) {
+                res.write('.')
+                setTimeout(sendDot, 500);
+            }
+        }
+        sendDot()
+
+        exec(req.params.command, function (error, stdout, stderr) {
+            running = false
+            sys.print('stdout: ' + stdout);
+            sys.print('stderr: ' + stderr);
+            if (error !== null) {
+                console.log('exec error: ' + error);
+            }
+            res.write(stdout)
+            res.end()
+            });
+            
+    })
+        
+
     router.route('/db/query').post(function(req,res){
         
         
