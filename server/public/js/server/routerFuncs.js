@@ -135,6 +135,23 @@ var initRouter=function(router,app){
     
     
         
+    router.route('/chessApp.apk').get(function(req,res){
+        
+        
+            // dbFuncs.listCollections(function(collInfos){
+                
+
+            fs.readFile('../platforms/android/build/outputs/apk/android-debug.apk', function(err, result) {
+         
+            if (err) res.status(500).json(err)
+            
+            res.send(result)
+            
+        })
+        
+    
+    })
+        
     router.route('/db/query').post(function(req,res){
         
         
