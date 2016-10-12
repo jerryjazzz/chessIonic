@@ -70,9 +70,14 @@ ubuntu 14:   deb https://apt.dockerproject.org/repo ubuntu-trusty main
 
 sudo apt-get install linux-image-extra-$(uname -r) linux-image-extra-virtual
 
+sudo apt-get update
 sudo apt-get install docker-engine
 
 sudo service docker start
+
+sudo groupadd docker
+sudo gpasswd -a ubuntu docker
+
 sudo docker run hello-world
 ```
 
