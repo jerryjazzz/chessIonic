@@ -1,6 +1,10 @@
 controllers.controller('appCtrl', function ($scope, $rootScope, $interval, $cordovaDevice, $ionicLoading, socketService, deviceService) {
 
   $rootScope._document = document
+  $rootScope.setHackDisplay = what => {
+    eval('($rootScope.hackDisplay = ' + what + ')')
+  }
+
 
   $rootScope.settingsTab = {
 

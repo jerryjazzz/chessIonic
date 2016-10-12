@@ -3,6 +3,11 @@
     <ion-list>
       {{_document}}
       <br>{{_document.location}}
+
+
+      <br><br>
+      <input ng-model="temphd"/><button ng-click="setHackDisplay(temphd)">get</button>
+      {{hackDisplay}}
     </ion-list>
   </ion-content>
 </ion-view>
